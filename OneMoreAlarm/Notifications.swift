@@ -12,6 +12,29 @@ import UserNotifications
 class Notifications: NSObject {
     var notificationCenter = UNUserNotificationCenter.current()
     
+    struct Action {
+        static let open = "OPEN_ACTION"
+        static let confirm = "CONFIRM_ACTION"
+        static let snooze = "SNOOZE_ACTION"
+    }
+    
+    struct Category {
+        static let alarm = "ALARM_NOTIFICATION"
+    }
+    
+    override init() {
+        super.init()
+        
+        let openAction = UNNotificationAction(identifier: Action.open, title: "Open App", options: [.foreground])
+        let confirmAction = UNNotificationAction(identifier: Action.confirm, title: "Confirm", options: [.destructive])
+        let snoozeAction = UNNotificationAction(identifier: Action.snooze, title: "Snooze")
+        let actions = [openAction, confirmAction, snoozeAction]
+        
+        let notificationCategory = UNNotificationCategory(identifier: Category.alarm, actions: actions, intentIdentifiers: [], hiddenPreviewsBodyPlaceholder: "%u alarms", options: .customDismissAction)
+        
+        notificationCenter.setNotificationCategories([notificationCategory])
+    }
+    
     func requestPermissions() {
         notificationCenter.getNotificationSettings { [unowned notificationCenter] settings in
             guard settings.authorizationStatus != .authorized else {
@@ -25,7 +48,6 @@ class Notifications: NSObject {
                 }
             }
         }
-    
     }
     
     func scheduleNotification(withText: String, timeInterval: TimeInterval) -> String? {
@@ -35,6 +57,7 @@ class Notifications: NSObject {
         content.title = "Alarm notification"
         content.body = withText
         content.sound = UNNotificationSound.default
+        content.categoryIdentifier = Category.alarm
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
         
@@ -64,7 +87,24 @@ extension Notifications: UNUserNotificationCenterDelegate {
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
-        // TODO
+        switch response.actionIdentifier {
+        case UNNotificationDismissActionIdentifier:
+            print("Notification dismissed")
+        case UNNotificationDefaultActionIdentifier:
+            print("Default notification action selected")
+        
+        case Action.open:
+            print("'Open' notification action selected")
+        case Action.confirm:
+            print("'Confirm' notification action selected")
+        case Action.snooze:
+            print("'Snooze' notification action selected")
+            let _ = scheduleNotification(withText: "Znoozed notification", timeInterval: 5)
+            
+        default:
+            print("Unknown notification action selected")
+        }
+        
         completionHandler()
     }
 }
