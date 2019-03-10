@@ -23,10 +23,12 @@ class ViewController: UIViewController {
         
         alarmsViewModel = AlarmsViewModel()
         
+        // Configure table with alarms
         alarmsTableView.register(AlarmsTableCell.nib, forCellReuseIdentifier: AlarmsTableCell.identifier)
         alarmsTableView.dataSource = self
         alarmsTableView.delegate = self
         
+        // Enable analog clock
         clockView.displayRealTime = true
         clockView.startClock()
     }

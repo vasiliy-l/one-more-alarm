@@ -33,13 +33,13 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="day pic" translatesAutoresizingMaskIntoConstraints="NO" id="9Pa-3a-DdN">
-                                <rect key="frame" x="20" y="492" width="335" height="70"/>
+                                <rect key="frame" x="20" y="517" width="335" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="wZi-JB-EXv"/>
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y85-i5-jxs" userLabel="Clock View" customClass="ClockView" customModule="OneMoreAlarm" customModuleProvider="target">
-                                <rect key="frame" x="64.5" y="230" width="246" height="246"/>
+                                <rect key="frame" x="52" y="230" width="271" height="271"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="y85-i5-jxs" secondAttribute="height" id="deu-bK-wHy"/>
@@ -49,7 +49,7 @@
                         <color key="backgroundColor" red="1" green="0.92484461039999999" blue="0.63547752150000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="GzP-wk-dHi" secondAttribute="bottom" constant="25" id="8hV-mo-VPN"/>
-                            <constraint firstItem="GzP-wk-dHi" firstAttribute="top" secondItem="9Pa-3a-DdN" secondAttribute="bottom" constant="50" id="Dlu-hf-OBo"/>
+                            <constraint firstItem="GzP-wk-dHi" firstAttribute="top" secondItem="9Pa-3a-DdN" secondAttribute="bottom" constant="25" id="Dlu-hf-OBo"/>
                             <constraint firstItem="y85-i5-jxs" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="KuL-ed-Idn"/>
                             <constraint firstItem="9Pa-3a-DdN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Pza-8H-Pvd"/>
                             <constraint firstItem="9Pa-3a-DdN" firstAttribute="top" secondItem="y85-i5-jxs" secondAttribute="bottom" constant="16" id="RzR-vI-YyE"/>
