@@ -21,6 +21,9 @@
 		3D98081E2234567000D1CFDA /* AlarmsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D98081D2234567000D1CFDA /* AlarmsViewModel.swift */; };
 		3D9808232234676600D1CFDA /* TextEditTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9808212234676600D1CFDA /* TextEditTableCell.swift */; };
 		3D9808242234676600D1CFDA /* TextEditTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D9808222234676600D1CFDA /* TextEditTableCell.xib */; };
+		3DD816642235B8BD00581955 /* ClockHand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD816612235B8BD00581955 /* ClockHand.swift */; };
+		3DD816652235B8BD00581955 /* ClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD816622235B8BD00581955 /* ClockView.swift */; };
+		3DD816662235B8BD00581955 /* ClockFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD816632235B8BD00581955 /* ClockFace.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +43,9 @@
 		3D98081D2234567000D1CFDA /* AlarmsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsViewModel.swift; sourceTree = "<group>"; };
 		3D9808212234676600D1CFDA /* TextEditTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditTableCell.swift; sourceTree = "<group>"; };
 		3D9808222234676600D1CFDA /* TextEditTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextEditTableCell.xib; sourceTree = "<group>"; };
+		3DD816612235B8BD00581955 /* ClockHand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClockHand.swift; sourceTree = "<group>"; };
+		3DD816622235B8BD00581955 /* ClockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClockView.swift; sourceTree = "<group>"; };
+		3DD816632235B8BD00581955 /* ClockFace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClockFace.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +110,7 @@
 		3D98081522344BD700D1CFDA /* View */ = {
 			isa = PBXGroup;
 			children = (
+				3DD816602235B8A200581955 /* Clock */,
 				3D98081D2234567000D1CFDA /* AlarmsViewModel.swift */,
 				3D56E06D22353F45009DE156 /* PropertiesTableViewModel.swift */,
 				3D98081A2234557E00D1CFDA /* AlarmsTable */,
@@ -121,6 +128,16 @@
 				3D98081722344BFC00D1CFDA /* AlarmsTableCell.xib */,
 			);
 			path = AlarmsTable;
+			sourceTree = "<group>";
+		};
+		3DD816602235B8A200581955 /* Clock */ = {
+			isa = PBXGroup;
+			children = (
+				3DD816622235B8BD00581955 /* ClockView.swift */,
+				3DD816632235B8BD00581955 /* ClockFace.swift */,
+				3DD816612235B8BD00581955 /* ClockHand.swift */,
+			);
+			path = Clock;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -197,14 +214,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D98081822344BFC00D1CFDA /* AlarmsTableCell.swift in Sources */,
+				3DD816662235B8BD00581955 /* ClockFace.swift in Sources */,
 				3D8D668D222C586C0002FE05 /* Notifications.swift in Sources */,
 				3D56E06E22353F45009DE156 /* PropertiesTableViewModel.swift in Sources */,
 				3D5A7184221977FA008EEC73 /* ViewController.swift in Sources */,
 				3D5A7182221977FA008EEC73 /* AppDelegate.swift in Sources */,
 				3D98081C223455B700D1CFDA /* EditAlarmViewController.swift in Sources */,
 				3D9808232234676600D1CFDA /* TextEditTableCell.swift in Sources */,
+				3DD816642235B8BD00581955 /* ClockHand.swift in Sources */,
 				3D98081E2234567000D1CFDA /* AlarmsViewModel.swift in Sources */,
 				3D88BC3F2233E8B200A69E4B /* Alarm.swift in Sources */,
+				3DD816652235B8BD00581955 /* ClockView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
