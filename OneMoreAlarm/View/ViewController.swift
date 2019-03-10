@@ -69,6 +69,7 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destVC = segue.destination as? EditAlarmViewController {
             destVC.alarmsViewModel = alarmsViewModel
+            destVC.alarmIndex = selectedAlarmIndex
         }
     }
 }
@@ -107,9 +108,13 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             tableView.beginUpdates()
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
-            //self.refreshUI()
         }
-        return [removeAction]
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (_, indexPath) in
+            self.selectedAlarmIndex = indexPath.row
+            self.performSegue(withIdentifier: "goToAlarmDetailsView", sender: self)
+        }
+        
+        return [editAction, removeAction]
     }
 
 }
