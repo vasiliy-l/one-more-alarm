@@ -7,10 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D56E06E22353F45009DE156 /* PropertiesTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D56E06D22353F45009DE156 /* PropertiesTableViewModel.swift */; };
 		3D5A7182221977FA008EEC73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5A7181221977FA008EEC73 /* AppDelegate.swift */; };
 		3D5A7184221977FA008EEC73 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5A7183221977FA008EEC73 /* ViewController.swift */; };
 		3D5A7189221977FB008EEC73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D5A7188221977FB008EEC73 /* Assets.xcassets */; };
 		3D5A718C221977FB008EEC73 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D5A718A221977FB008EEC73 /* LaunchScreen.storyboard */; };
+		3D88BC3F2233E8B200A69E4B /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D88BC3E2233E8B200A69E4B /* Alarm.swift */; };
+		3D8D668D222C586C0002FE05 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D668C222C586C0002FE05 /* Notifications.swift */; };
+		3D98081822344BFC00D1CFDA /* AlarmsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D98081622344BFC00D1CFDA /* AlarmsTableCell.swift */; };
+		3D98081922344BFC00D1CFDA /* AlarmsTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D98081722344BFC00D1CFDA /* AlarmsTableCell.xib */; };
+		3D98081C223455B700D1CFDA /* EditAlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D98081B223455B700D1CFDA /* EditAlarmViewController.swift */; };
+		3D98081E2234567000D1CFDA /* AlarmsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D98081D2234567000D1CFDA /* AlarmsViewModel.swift */; };
+		3D9808232234676600D1CFDA /* TextEditTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9808212234676600D1CFDA /* TextEditTableCell.swift */; };
+		3D9808242234676600D1CFDA /* TextEditTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D9808222234676600D1CFDA /* TextEditTableCell.xib */; };
+		580B62DC22355D7A007383DB /* ClockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580B62DB22355D7A007383DB /* ClockViewController.swift */; };
 		58F73478222AB8420093CA3C /* ClockFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F73477222AB8420093CA3C /* ClockFace.swift */; };
 		58F7349C222C31490093CA3C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58F7349B222C31490093CA3C /* Main.storyboard */; };
 		58F86D1D222A9E7C0096E289 /* Clock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F86D1C222A9E7C0096E289 /* Clock.swift */; };
@@ -18,12 +28,22 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D56E06D22353F45009DE156 /* PropertiesTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesTableViewModel.swift; sourceTree = "<group>"; };
 		3D5A717E221977FA008EEC73 /* OneMoreAlarm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneMoreAlarm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D5A7181221977FA008EEC73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D5A7183221977FA008EEC73 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3D5A7188221977FB008EEC73 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D5A718B221977FB008EEC73 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3D5A718D221977FB008EEC73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D88BC3E2233E8B200A69E4B /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
+		3D8D668C222C586C0002FE05 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		3D98081622344BFC00D1CFDA /* AlarmsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsTableCell.swift; sourceTree = "<group>"; };
+		3D98081722344BFC00D1CFDA /* AlarmsTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlarmsTableCell.xib; sourceTree = "<group>"; };
+		3D98081B223455B700D1CFDA /* EditAlarmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAlarmViewController.swift; sourceTree = "<group>"; };
+		3D98081D2234567000D1CFDA /* AlarmsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsViewModel.swift; sourceTree = "<group>"; };
+		3D9808212234676600D1CFDA /* TextEditTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditTableCell.swift; sourceTree = "<group>"; };
+		3D9808222234676600D1CFDA /* TextEditTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextEditTableCell.xib; sourceTree = "<group>"; };
+		580B62DB22355D7A007383DB /* ClockViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClockViewController.swift; sourceTree = "<group>"; };
 		58F73477222AB8420093CA3C /* ClockFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockFace.swift; sourceTree = "<group>"; };
 		58F7349B222C31490093CA3C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		58F86D1C222A9E7C0096E289 /* Clock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clock.swift; sourceTree = "<group>"; };
@@ -41,6 +61,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D56E06C22353905009DE156 /* PropertiesTable */ = {
+			isa = PBXGroup;
+			children = (
+				3D9808212234676600D1CFDA /* TextEditTableCell.swift */,
+				3D9808222234676600D1CFDA /* TextEditTableCell.xib */,
+			);
+			path = PropertiesTable;
+			sourceTree = "<group>";
+		};
 		3D5A7175221977FA008EEC73 = {
 			isa = PBXGroup;
 			children = (
@@ -60,16 +89,48 @@
 		3D5A7180221977FA008EEC73 /* OneMoreAlarm */ = {
 			isa = PBXGroup;
 			children = (
-				583381D3223527E1009D9698 /* Model */,
 				583381D2223527C8009D9698 /* View */,
 				583381D4223527EE009D9698 /* Controller */,
 				3D5A718A221977FB008EEC73 /* LaunchScreen.storyboard */,
+				3D98081522344BD700D1CFDA /* View */,
+				3D88BC3D2233E89300A69E4B /* Model */,
 				3D5A7181221977FA008EEC73 /* AppDelegate.swift */,
 				3D5A7188221977FB008EEC73 /* Assets.xcassets */,
 				58F7349B222C31490093CA3C /* Main.storyboard */,
 				3D5A718D221977FB008EEC73 /* Info.plist */,
+				3D8D668C222C586C0002FE05 /* Notifications.swift */,
 			);
 			path = OneMoreAlarm;
+			sourceTree = "<group>";
+		};
+		3D88BC3D2233E89300A69E4B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3D88BC3E2233E8B200A69E4B /* Alarm.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		3D98081522344BD700D1CFDA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3D98081D2234567000D1CFDA /* AlarmsViewModel.swift */,
+				3D56E06D22353F45009DE156 /* PropertiesTableViewModel.swift */,
+				3D98081A2234557E00D1CFDA /* AlarmsTable */,
+				3D56E06C22353905009DE156 /* PropertiesTable */,
+				3D5A7183221977FA008EEC73 /* ViewController.swift */,
+				3D98081B223455B700D1CFDA /* EditAlarmViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		3D98081A2234557E00D1CFDA /* AlarmsTable */ = {
+			isa = PBXGroup;
+			children = (
+				3D98081622344BFC00D1CFDA /* AlarmsTableCell.swift */,
+				3D98081722344BFC00D1CFDA /* AlarmsTableCell.xib */,
+			);
+			path = AlarmsTable;
 			sourceTree = "<group>";
 		};
 		583381D2223527C8009D9698 /* View */ = {
@@ -82,17 +143,10 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		583381D3223527E1009D9698 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		583381D4223527EE009D9698 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				3D5A7183221977FA008EEC73 /* ViewController.swift */,
+				580B62DB22355D7A007383DB /* ClockViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -155,6 +209,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D9808242234676600D1CFDA /* TextEditTableCell.xib in Resources */,
+				3D98081922344BFC00D1CFDA /* AlarmsTableCell.xib in Resources */,
 				3D5A718C221977FB008EEC73 /* LaunchScreen.storyboard in Resources */,
 				3D5A7189221977FB008EEC73 /* Assets.xcassets in Resources */,
 				58F7349C222C31490093CA3C /* Main.storyboard in Resources */,
@@ -168,11 +224,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D98081822344BFC00D1CFDA /* AlarmsTableCell.swift in Sources */,
+				3D8D668D222C586C0002FE05 /* Notifications.swift in Sources */,
+				3D56E06E22353F45009DE156 /* PropertiesTableViewModel.swift in Sources */,
 				3D5A7184221977FA008EEC73 /* ViewController.swift in Sources */,
 				58F86D1D222A9E7C0096E289 /* Clock.swift in Sources */,
 				58F86D1F222AACF40096E289 /* ClockHand.swift in Sources */,
 				58F73478222AB8420093CA3C /* ClockFace.swift in Sources */,
 				3D5A7182221977FA008EEC73 /* AppDelegate.swift in Sources */,
+				580B62DC22355D7A007383DB /* ClockViewController.swift in Sources */,
+				3D98081C223455B700D1CFDA /* EditAlarmViewController.swift in Sources */,
+				3D9808232234676600D1CFDA /* TextEditTableCell.swift in Sources */,
+				3D98081E2234567000D1CFDA /* AlarmsViewModel.swift in Sources */,
+				3D88BC3F2233E8B200A69E4B /* Alarm.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

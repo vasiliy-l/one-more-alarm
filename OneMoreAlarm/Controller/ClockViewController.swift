@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable class ViewController: UIViewController {
+@IBDesignable class ClockViewController: UIViewController {
 
     @IBOutlet weak var clock: Clock!
     @IBOutlet weak var dayPick: UIImageView!
