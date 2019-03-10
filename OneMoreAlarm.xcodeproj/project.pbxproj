@@ -9,19 +9,25 @@
 /* Begin PBXBuildFile section */
 		3D5A7182221977FA008EEC73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5A7181221977FA008EEC73 /* AppDelegate.swift */; };
 		3D5A7184221977FA008EEC73 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5A7183221977FA008EEC73 /* ViewController.swift */; };
-		3D5A7187221977FA008EEC73 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D5A7185221977FA008EEC73 /* Main.storyboard */; };
 		3D5A7189221977FB008EEC73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D5A7188221977FB008EEC73 /* Assets.xcassets */; };
 		3D5A718C221977FB008EEC73 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D5A718A221977FB008EEC73 /* LaunchScreen.storyboard */; };
+		58F73478222AB8420093CA3C /* ClockFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F73477222AB8420093CA3C /* ClockFace.swift */; };
+		58F7349C222C31490093CA3C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58F7349B222C31490093CA3C /* Main.storyboard */; };
+		58F86D1D222A9E7C0096E289 /* Clock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F86D1C222A9E7C0096E289 /* Clock.swift */; };
+		58F86D1F222AACF40096E289 /* ClockHand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F86D1E222AACF40096E289 /* ClockHand.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3D5A717E221977FA008EEC73 /* OneMoreAlarm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneMoreAlarm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D5A7181221977FA008EEC73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D5A7183221977FA008EEC73 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		3D5A7186221977FA008EEC73 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3D5A7188221977FB008EEC73 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3D5A718B221977FB008EEC73 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3D5A718D221977FB008EEC73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		58F73477222AB8420093CA3C /* ClockFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockFace.swift; sourceTree = "<group>"; };
+		58F7349B222C31490093CA3C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		58F86D1C222A9E7C0096E289 /* Clock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clock.swift; sourceTree = "<group>"; };
+		58F86D1E222AACF40096E289 /* ClockHand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockHand.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,14 +60,41 @@
 		3D5A7180221977FA008EEC73 /* OneMoreAlarm */ = {
 			isa = PBXGroup;
 			children = (
-				3D5A7181221977FA008EEC73 /* AppDelegate.swift */,
-				3D5A7183221977FA008EEC73 /* ViewController.swift */,
-				3D5A7185221977FA008EEC73 /* Main.storyboard */,
-				3D5A7188221977FB008EEC73 /* Assets.xcassets */,
+				583381D3223527E1009D9698 /* Model */,
+				583381D2223527C8009D9698 /* View */,
+				583381D4223527EE009D9698 /* Controller */,
 				3D5A718A221977FB008EEC73 /* LaunchScreen.storyboard */,
+				3D5A7181221977FA008EEC73 /* AppDelegate.swift */,
+				3D5A7188221977FB008EEC73 /* Assets.xcassets */,
+				58F7349B222C31490093CA3C /* Main.storyboard */,
 				3D5A718D221977FB008EEC73 /* Info.plist */,
 			);
 			path = OneMoreAlarm;
+			sourceTree = "<group>";
+		};
+		583381D2223527C8009D9698 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				58F86D1C222A9E7C0096E289 /* Clock.swift */,
+				58F86D1E222AACF40096E289 /* ClockHand.swift */,
+				58F73477222AB8420093CA3C /* ClockFace.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		583381D3223527E1009D9698 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		583381D4223527EE009D9698 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3D5A7183221977FA008EEC73 /* ViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -124,7 +157,7 @@
 			files = (
 				3D5A718C221977FB008EEC73 /* LaunchScreen.storyboard in Resources */,
 				3D5A7189221977FB008EEC73 /* Assets.xcassets in Resources */,
-				3D5A7187221977FA008EEC73 /* Main.storyboard in Resources */,
+				58F7349C222C31490093CA3C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,6 +169,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D5A7184221977FA008EEC73 /* ViewController.swift in Sources */,
+				58F86D1D222A9E7C0096E289 /* Clock.swift in Sources */,
+				58F86D1F222AACF40096E289 /* ClockHand.swift in Sources */,
+				58F73478222AB8420093CA3C /* ClockFace.swift in Sources */,
 				3D5A7182221977FA008EEC73 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -143,14 +179,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		3D5A7185221977FA008EEC73 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3D5A7186221977FA008EEC73 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		3D5A718A221977FB008EEC73 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

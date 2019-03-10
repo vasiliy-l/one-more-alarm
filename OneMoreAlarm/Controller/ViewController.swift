@@ -8,13 +8,17 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+@IBDesignable class ViewController: UIViewController {
+
+    @IBOutlet weak var clock: Clock!
+    @IBOutlet weak var dayPick: UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        clock.displayRealTime = true
+        clock.startClock()
     }
 
-
 }
+
 
