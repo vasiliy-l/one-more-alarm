@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D56E06E22353F45009DE156 /* PropertiesTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D56E06D22353F45009DE156 /* PropertiesTableViewModel.swift */; };
 		3D5A7182221977FA008EEC73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5A7181221977FA008EEC73 /* AppDelegate.swift */; };
 		3D5A7184221977FA008EEC73 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5A7183221977FA008EEC73 /* ViewController.swift */; };
 		3D5A7187221977FA008EEC73 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D5A7185221977FA008EEC73 /* Main.storyboard */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D56E06D22353F45009DE156 /* PropertiesTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesTableViewModel.swift; sourceTree = "<group>"; };
 		3D5A717E221977FA008EEC73 /* OneMoreAlarm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneMoreAlarm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D5A7181221977FA008EEC73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D5A7183221977FA008EEC73 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -51,6 +53,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D56E06C22353905009DE156 /* PropertiesTable */ = {
+			isa = PBXGroup;
+			children = (
+				3D9808212234676600D1CFDA /* TextEditTableCell.swift */,
+				3D9808222234676600D1CFDA /* TextEditTableCell.xib */,
+			);
+			path = PropertiesTable;
+			sourceTree = "<group>";
+		};
 		3D5A7175221977FA008EEC73 = {
 			isa = PBXGroup;
 			children = (
@@ -78,7 +89,6 @@
 				3D5A718A221977FB008EEC73 /* LaunchScreen.storyboard */,
 				3D5A718D221977FB008EEC73 /* Info.plist */,
 				3D8D668C222C586C0002FE05 /* Notifications.swift */,
-				3D98081D2234567000D1CFDA /* AlarmsViewModel.swift */,
 			);
 			path = OneMoreAlarm;
 			sourceTree = "<group>";
@@ -94,11 +104,12 @@
 		3D98081522344BD700D1CFDA /* View */ = {
 			isa = PBXGroup;
 			children = (
+				3D98081D2234567000D1CFDA /* AlarmsViewModel.swift */,
+				3D56E06D22353F45009DE156 /* PropertiesTableViewModel.swift */,
+				3D98081A2234557E00D1CFDA /* AlarmsTable */,
+				3D56E06C22353905009DE156 /* PropertiesTable */,
 				3D5A7183221977FA008EEC73 /* ViewController.swift */,
 				3D98081B223455B700D1CFDA /* EditAlarmViewController.swift */,
-				3D98081A2234557E00D1CFDA /* AlarmsTable */,
-				3D9808212234676600D1CFDA /* TextEditTableCell.swift */,
-				3D9808222234676600D1CFDA /* TextEditTableCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -187,6 +198,7 @@
 			files = (
 				3D98081822344BFC00D1CFDA /* AlarmsTableCell.swift in Sources */,
 				3D8D668D222C586C0002FE05 /* Notifications.swift in Sources */,
+				3D56E06E22353F45009DE156 /* PropertiesTableViewModel.swift in Sources */,
 				3D5A7184221977FA008EEC73 /* ViewController.swift in Sources */,
 				3D5A7182221977FA008EEC73 /* AppDelegate.swift in Sources */,
 				3D98081C223455B700D1CFDA /* EditAlarmViewController.swift in Sources */,

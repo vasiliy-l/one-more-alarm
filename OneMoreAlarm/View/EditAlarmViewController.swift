@@ -11,6 +11,7 @@ import UIKit
 class EditAlarmViewController: UIViewController {
     
     var alarmsViewModel: AlarmsViewModel!
+    var propertiesTableViewModel: PropertiesTableViewModel!
     var alarmIndex: Int?
 
     @IBOutlet var timePicker: UIDatePicker!
@@ -19,8 +20,9 @@ class EditAlarmViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        propertiesTableView.register(TextEditTableCell.nib, forCellReuseIdentifier: TextEditTableCell.identifier)
+        
+        propertiesTableViewModel = PropertiesTableViewModel(for: propertiesTableView)
+       
         propertiesTableView.dataSource = self
         propertiesTableView.delegate = self
         
@@ -54,48 +56,16 @@ class EditAlarmViewController: UIViewController {
 extension EditAlarmViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return propertiesTableViewModel.propertiesCount;
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.row {
-        case 0: // name property
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: TextEditTableCell.identifier, for: indexPath) as? TextEditTableCell else {
-                return UITableViewCell()
-            }
-            
-            cell.nameLabel.text = "Name"
-            cell.valueLabel.text = alarmsViewModel.getAlarmName(for: alarmIndex)
-            
-            return cell;
-        default:
-            return UITableViewCell()
-        }
+        
+        return propertiesTableViewModel.prepareCell(for: indexPath, using: alarmsViewModel, alarmIndex: alarmIndex)
     }
     
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        switch indexPath.row {
-        case 0:  // name  property
-            let editNameAlert = UIAlertController(title: "Edit alarm name", message: nil, preferredStyle: .alert)
-            editNameAlert.addTextField { textField in
-                textField.text = self.alarmsViewModel.getAlarmName(for: self.alarmIndex)
-            }
-            
-            let applyAction = UIAlertAction(title: "Apply", style: .default) { [unowned editNameAlert] action in
-                if let textField = editNameAlert.textFields?[0],
-                   let newAlarmName = textField.text,
-                   newAlarmName.count > 0 { // update name only if not empty
-                    self.alarmsViewModel.updateAlarm(for: self.alarmIndex, name: newAlarmName)
-                }
-                
-                self.refreshUI();
-            }
-            editNameAlert.addAction(applyAction);
-            
-            present(editNameAlert, animated: true, completion: nil)
-        default: // unknown property pressed
-            return;
-        }
+        propertiesTableViewModel.performAction(for: indexPath, using: alarmsViewModel, on: self, alarmIndex: alarmIndex)
     }
     
 }
