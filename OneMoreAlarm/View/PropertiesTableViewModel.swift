@@ -19,15 +19,26 @@ class PropertiesTableViewModel {
     }
     
     private func registedNibs() {
-         tableView.register(TextEditTableCell.nib, forCellReuseIdentifier: TextEditTableCell.identifier)
+        tableView.register(TextEditTableCell.nib, forCellReuseIdentifier: TextEditTableCell.identifier)
     }
     
+    /**
+     Returns amount of existing properties
+     */
     var propertiesCount: Int {
-        return PropertyCell.count()
+        return AlarmProperty.count()
     }
     
-    func prepareCell(for indexPath: IndexPath, using alarmsVM: AlarmsViewModel, alarmIndex: Int?) -> UITableViewCell {
-        guard let property = PropertyCell.init(rawValue: indexPath.row) else {
+    /**
+     Prepares a cell object for properties table view by given index path
+     
+     - parameters:
+     - indexPath: current index path of the table
+     - alarmsVM: current AlarmsViewModel instance to get required alarm properties to display as property values
+     - alarmId: ID of the alarm which poperties should be used
+     */
+    func prepareCell(for indexPath: IndexPath, using alarmsVM: AlarmsViewModel, alarmId: Int) -> UITableViewCell {
+        guard let property = AlarmProperty.init(rawValue: indexPath.row) else {
             return UITableViewCell()
         }
         
@@ -38,15 +49,24 @@ class PropertiesTableViewModel {
             }
             
             cell.nameLabel.text = property.propertyName()
-            cell.valueLabel.text = alarmsVM.getAlarmName(for: alarmIndex)
+            cell.valueLabel.text = alarmsVM.getAlarmName(for: alarmId)
             
             return cell
         }
     }
     
-    func performAction(for indexPath: IndexPath, using alarmsVM: AlarmsViewModel, on currentVC: UIViewController, alarmIndex: Int?) {
+    /**
+     Performs a particular action for poperty after the User selected a property cell
+     
+     - parameters:
+     - indexPath: current index path of the table
+     - alarmsVM: current AlarmsViewModel instance to get required alarm properties to display as property values
+     - currentVC: current ViewController object where properties table is placed
+     - alarmId: ID of the alarm which poperties should be used
+     */
+    func performAction(for indexPath: IndexPath, using alarmsVM: AlarmsViewModel, on currentVC: UIViewController, alarmId: Int) {
         
-        guard let property = PropertyCell.init(rawValue: indexPath.row) else {
+        guard let property = AlarmProperty.init(rawValue: indexPath.row) else {
             return
         }
         
@@ -58,15 +78,15 @@ class PropertiesTableViewModel {
                 preferredStyle: .alert)
             
             editNameAlert.addTextField { (textField) in
-                let currentAlarmName = alarmsVM.getAlarmName(for: alarmIndex)
+                let currentAlarmName = alarmsVM.getAlarmName(for: alarmId)
                 textField.text = currentAlarmName
             }
             
             let applyAction = UIAlertAction(title: "Apply", style: .default) { [unowned editNameAlert] action in
                 if let textField = editNameAlert.textFields?[0],
-                   let newAlarmName = textField.text,
-                   newAlarmName.count > 0 { // update name only if not empty
-                    alarmsVM.updateAlarm(for: alarmIndex, name: newAlarmName)
+                    let newAlarmName = textField.text,
+                    newAlarmName.count > 0 { // update name only if not empty
+                    alarmsVM.updateAlarm(for: alarmId, name: newAlarmName)
                 }
                 
                 self.tableView.reloadData()
@@ -78,7 +98,7 @@ class PropertiesTableViewModel {
     }
 }
 
-enum PropertyCell: Int {
+enum AlarmProperty: Int {
     case Name
     
     static var count = {
@@ -87,10 +107,10 @@ enum PropertyCell: Int {
     
     static let propertyNames = [
         Name: "Name",
-    ]
+        ]
     
     func propertyName() -> String {
-        if let propertyName = PropertyCell.propertyNames[self] {
+        if let propertyName = AlarmProperty.propertyNames[self] {
             return propertyName
         } else {
             return ""

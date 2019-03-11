@@ -22,12 +22,19 @@ class Alarm: Codable {
     }
 }
 
+/**
+ Collection of user alarms
+ */
 class AlarmsCollection: Codable {
-    var alarms: [Alarm] = [Alarm]()
+    private var alarms: [Alarm] = [Alarm]()
     
+    /**
+     Amount of existing alarm objects
+     */
     var count: Int {
         return alarms.count
     }
+    
     
     func get(at index: Int) -> Alarm? {
         guard count >= index else {
@@ -37,15 +44,26 @@ class AlarmsCollection: Codable {
         return alarms[index]
     }
     
-    func add(_ alarm: Alarm) {
+    /**
+     Append collection with new alarm instance
+     
+     - returns: ID of created alarm object
+     */
+    func append() -> Int {
+        let alarm =  Alarm(hour: 09, minute: 00)
         alarms.append(alarm)
+        return alarms.count - 1
     }
     
-    func remove(at: Int) {
-        alarms.remove(at: at)
+    /**
+     Removes specific alarm object
+     
+     - parameters:
+     - at: ID of the alarm that needs to be removed from collection
+     */
+    func remove(at index: Int) {
+        alarms.remove(at: index)
     }
     
-    func newAlarmInstance() -> Alarm {
-        return Alarm(hour: 09, minute: 00)
-    }
+    
 }
