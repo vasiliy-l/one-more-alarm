@@ -12,8 +12,10 @@ class EditAlarmViewController: UIViewController {
     
     var alarmsViewModel: AlarmsViewModel!
     var propertiesTableViewModel: PropertiesTableViewModel!
-    var alarmIndex: Int?
-
+    
+    var selectedAlarmIndexToEdit: Int?
+    private var actualAlarmIndex: Int!
+    
     @IBOutlet var timePicker: UIDatePicker!
     @IBOutlet var propertiesTableView: UITableView!
     
@@ -22,32 +24,43 @@ class EditAlarmViewController: UIViewController {
         super.viewDidLoad()
         
         propertiesTableViewModel = PropertiesTableViewModel(for: propertiesTableView)
-       
+        
         propertiesTableView.dataSource = self
         propertiesTableView.delegate = self
+        
+        // determine whether to work with selected alarm from previous screen or edit new alarm
+        if let alarmIndex = selectedAlarmIndexToEdit {
+            actualAlarmIndex = alarmIndex
+        } else {
+            actualAlarmIndex = alarmsViewModel.addAlarm()
+        }
         
         refreshUI();
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        alarmsViewModel.discardChanges()
+        alarmsViewModel.discardChanges() // discard all unsaved changes
     }
     
     @IBAction func saveButtonPressed(_ sender: Any) {
-        alarmsViewModel.applyChanges();
-        
+        alarmsViewModel.applyChanges(); // save all changes
         navigationController?.popToRootViewController(animated: true)
     }
     
+    /**
+     Updates time value of current alarm during interaction with time picker
+     */
     @IBAction func saveSelectedTime() {
-        alarmsViewModel.updateAlarm(for: alarmIndex, time: timePicker.date)
+        alarmsViewModel.updateAlarm(for: actualAlarmIndex, time: timePicker.date)
     }
     
-    
+    /**
+     Sets correct state of UI controls according to current alarm characteristics
+     */
     func refreshUI() {
         propertiesTableView.reloadData();
         
-        if let date = alarmsViewModel.getAlarmTime(for: alarmIndex) {
+        if let date = alarmsViewModel.getAlarmTime(for: actualAlarmIndex) {
             timePicker.setDate(date, animated: false)
         }
     }
@@ -59,13 +72,14 @@ extension EditAlarmViewController: UITableViewDataSource, UITableViewDelegate {
         return propertiesTableViewModel.propertiesCount;
     }
     
+    // Display properties in table
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        return propertiesTableViewModel.prepareCell(for: indexPath, using: alarmsViewModel, alarmIndex: alarmIndex)
+        return propertiesTableViewModel.prepareCell(for: indexPath, using: alarmsViewModel, alarmId: actualAlarmIndex)
     }
     
+    // Interact with user to update property value on selection from table
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        propertiesTableViewModel.performAction(for: indexPath, using: alarmsViewModel, on: self, alarmIndex: alarmIndex)
+        propertiesTableViewModel.performAction(for: indexPath, using: alarmsViewModel, on: self, alarmId: actualAlarmIndex)
     }
     
 }

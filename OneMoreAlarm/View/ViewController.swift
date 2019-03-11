@@ -54,7 +54,7 @@ class ViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destVC = segue.destination as? EditAlarmViewController {
             destVC.alarmsViewModel = alarmsViewModel
-            destVC.alarmIndex = selectedAlarmIndex
+            destVC.selectedAlarmIndexToEdit = selectedAlarmIndex
         }
     }
 }
