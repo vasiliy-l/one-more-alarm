@@ -13,39 +13,24 @@ class ViewController: UIViewController {
     let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
     
     @IBOutlet var alarmsTableView: UITableView!
+    @IBOutlet var clockView: ClockView!
     
     var alarmsViewModel: AlarmsViewModel!
     var selectedAlarmIndex: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
+        alarmsViewModel = AlarmsViewModel()
+        
+        // Configure table with alarms
         alarmsTableView.register(AlarmsTableCell.nib, forCellReuseIdentifier: AlarmsTableCell.identifier)
         alarmsTableView.dataSource = self
         alarmsTableView.delegate = self
         
-        alarmsViewModel = AlarmsViewModel()
-        
-        /*
-        let alarm1 = Alarm(hour: 8, minute: 30)
-        let alarm2 = Alarm(hour: 9, minute: 20)
-        alarm2.name = "Alarm2"
-        let alarms  = AlarmsCollection()
-        alarms.alarms.append(alarm1)
-        alarms.alarms.append(alarm2)
-        let encodedData = try? PropertyListEncoder().encode(alarms)
-        
-        
-        if (encodedData != nil) {
-            userDefaults.set(encodedData, forKey: "myAlarmArray")
-        
-            let storedAlarmData = userDefaults.data(forKey: "myAlarmArray")!
-            let storedAlarmArray = try? PropertyListDecoder().decode(AlarmsCollection.self, from: storedAlarmData)
-            print(storedAlarmArray!.alarms.count)
-
-        }
-        */
+        // Enable analog clock
+        clockView.displayRealTime = true
+        clockView.startClock()
     }
     
     override func viewDidAppear(_ animated: Bool) {

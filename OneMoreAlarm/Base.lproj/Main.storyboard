@@ -25,34 +25,54 @@
                                     <constraint firstAttribute="height" constant="130" id="bPA-Dl-6MN"/>
                                 </constraints>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GzP-wk-dHi">
-                                <rect key="frame" x="270" y="615" width="85" height="30"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="day pic" translatesAutoresizingMaskIntoConstraints="NO" id="9Pa-3a-DdN">
+                                <rect key="frame" x="20" y="507" width="335" height="70"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="wZi-JB-EXv"/>
+                                </constraints>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y85-i5-jxs" userLabel="Clock View" customClass="ClockView" customModule="OneMoreAlarm" customModuleProvider="target">
+                                <rect key="frame" x="57" y="230" width="261" height="261"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="y85-i5-jxs" secondAttribute="height" id="deu-bK-wHy"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mfM-SY-nXR">
+                                <rect key="frame" x="260" y="607" width="85" height="30"/>
                                 <state key="normal" title="+ Add Alarm"/>
                                 <connections>
-                                    <action selector="addAlarmButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="yiL-MM-Ihd"/>
+                                    <action selector="addAlarmButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="asQ-yJ-i83"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="1" green="0.92484461039999999" blue="0.63547752150000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="GzP-wk-dHi" secondAttribute="bottom" constant="22" id="8hV-mo-VPN"/>
-                            <constraint firstItem="GzP-wk-dHi" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Ugw-vc-6KP"/>
+                            <constraint firstItem="mfM-SY-nXR" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="DaK-Z5-gj3"/>
+                            <constraint firstItem="y85-i5-jxs" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="KuL-ed-Idn"/>
+                            <constraint firstItem="9Pa-3a-DdN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Pza-8H-Pvd"/>
+                            <constraint firstItem="9Pa-3a-DdN" firstAttribute="top" secondItem="y85-i5-jxs" secondAttribute="bottom" constant="16" id="RzR-vI-YyE"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="9Pa-3a-DdN" secondAttribute="bottom" constant="90" id="T5K-cm-KKH"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="mfM-SY-nXR" secondAttribute="bottom" constant="30" id="ZkP-Hu-7J1"/>
                             <constraint firstItem="qxX-TD-ypG" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="g2H-K1-u7v"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="9Pa-3a-DdN" secondAttribute="trailing" constant="20" id="gZd-DM-Y2o"/>
+                            <constraint firstItem="y85-i5-jxs" firstAttribute="top" secondItem="qxX-TD-ypG" secondAttribute="bottom" constant="16" id="hZF-eH-Vq4"/>
                             <constraint firstItem="qxX-TD-ypG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="qVh-kH-GvU"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="GzP-wk-dHi" secondAttribute="trailing" constant="20" id="rJB-7Y-2zG"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="qxX-TD-ypG" secondAttribute="trailing" constant="20" id="vKc-xG-15B"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="mfM-SY-nXR" secondAttribute="trailing" constant="30" id="xfI-qA-xGZ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="My Alarms" id="MPz-rp-x1I"/>
                     <connections>
                         <outlet property="alarmsTableView" destination="qxX-TD-ypG" id="jgu-Cx-cbH"/>
+                        <outlet property="clockView" destination="y85-i5-jxs" id="5NV-Or-suM"/>
                         <segue destination="apg-Vv-MeR" kind="show" identifier="goToAlarmDetailsView" id="vhC-S9-4A9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1103.2" y="57.121439280359823"/>
+            <point key="canvasLocation" x="1102.5" y="57.04225352112676"/>
         </scene>
         <!--Alarm Details-->
         <scene sceneID="vSU-Tk-XJe">
@@ -75,26 +95,26 @@
                                 </connections>
                             </datePicker>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qrL-EF-W5x">
-                                <rect key="frame" x="319" y="617" width="34" height="30"/>
+                                <rect key="frame" x="311" y="607" width="34" height="30"/>
                                 <state key="normal" title="Save"/>
                                 <connections>
                                     <action selector="saveButtonPressed:" destination="apg-Vv-MeR" eventType="touchUpInside" id="NRn-Ig-5c4"/>
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="JnE-IM-Z25" userLabel="Properties Table View">
-                                <rect key="frame" x="29" y="300" width="326" height="297"/>
+                                <rect key="frame" x="29" y="300" width="326" height="277"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="CN2-wq-nT3" firstAttribute="trailing" secondItem="qrL-EF-W5x" secondAttribute="trailing" constant="22" id="0XN-sF-elo"/>
+                            <constraint firstItem="CN2-wq-nT3" firstAttribute="trailing" secondItem="qrL-EF-W5x" secondAttribute="trailing" constant="30" id="0XN-sF-elo"/>
                             <constraint firstItem="ccr-6X-n61" firstAttribute="leading" secondItem="CN2-wq-nT3" secondAttribute="leading" id="1aH-ig-5be"/>
                             <constraint firstItem="CN2-wq-nT3" firstAttribute="trailing" secondItem="JnE-IM-Z25" secondAttribute="trailing" constant="20" id="91x-M0-XjD"/>
                             <constraint firstItem="ccr-6X-n61" firstAttribute="trailing" secondItem="CN2-wq-nT3" secondAttribute="trailing" id="Ktx-h3-nrL"/>
-                            <constraint firstItem="qrL-EF-W5x" firstAttribute="top" secondItem="JnE-IM-Z25" secondAttribute="bottom" constant="20" id="Q0Y-jc-Ras"/>
-                            <constraint firstItem="CN2-wq-nT3" firstAttribute="bottom" secondItem="qrL-EF-W5x" secondAttribute="bottom" constant="20" id="VbC-Wg-z4y"/>
-                            <constraint firstItem="qrL-EF-W5x" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="CN2-wq-nT3" secondAttribute="leading" constant="20" id="W9y-Ce-4Xf"/>
+                            <constraint firstItem="qrL-EF-W5x" firstAttribute="top" secondItem="JnE-IM-Z25" secondAttribute="bottom" constant="30" id="Q0Y-jc-Ras"/>
+                            <constraint firstItem="CN2-wq-nT3" firstAttribute="bottom" secondItem="qrL-EF-W5x" secondAttribute="bottom" constant="30" id="VbC-Wg-z4y"/>
+                            <constraint firstItem="qrL-EF-W5x" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="CN2-wq-nT3" secondAttribute="leading" constant="30" id="W9y-Ce-4Xf"/>
                             <constraint firstItem="JnE-IM-Z25" firstAttribute="top" secondItem="ccr-6X-n61" secondAttribute="bottom" constant="20" id="kvD-Nk-I7N"/>
                             <constraint firstItem="JnE-IM-Z25" firstAttribute="leading" secondItem="CN2-wq-nT3" secondAttribute="leading" constant="29" id="o1o-fp-jlm"/>
                             <constraint firstItem="ccr-6X-n61" firstAttribute="top" secondItem="CN2-wq-nT3" secondAttribute="top" id="y6w-aT-zho"/>
@@ -130,4 +150,7 @@
             <point key="canvasLocation" x="257" y="57"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="day pic" width="269.5" height="65"/>
+    </resources>
 </document>
