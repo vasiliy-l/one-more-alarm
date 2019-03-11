@@ -59,7 +59,7 @@ class AlarmsCollection: Codable {
      Removes specific alarm object
      
      - parameters:
-     - at: ID of the alarm that needs to be removed from collection
+        - at: ID of the alarm that needs to be removed from collection
      */
     func remove(at index: Int) {
         alarms.remove(at: index)

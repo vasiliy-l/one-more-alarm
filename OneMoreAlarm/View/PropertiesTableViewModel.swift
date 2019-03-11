@@ -33,9 +33,9 @@ class PropertiesTableViewModel {
      Prepares a cell object for properties table view by given index path
      
      - parameters:
-     - indexPath: current index path of the table
-     - alarmsVM: current AlarmsViewModel instance to get required alarm properties to display as property values
-     - alarmId: ID of the alarm which poperties should be used
+         - indexPath: current index path of the table
+         - alarmsVM: current AlarmsViewModel instance to get required alarm properties to display as property values
+         - alarmId: ID of the alarm which poperties should be used
      */
     func prepareCell(for indexPath: IndexPath, using alarmsVM: AlarmsViewModel, alarmId: Int) -> UITableViewCell {
         guard let property = AlarmProperty.init(rawValue: indexPath.row) else {
@@ -59,10 +59,10 @@ class PropertiesTableViewModel {
      Performs a particular action for poperty after the User selected a property cell
      
      - parameters:
-     - indexPath: current index path of the table
-     - alarmsVM: current AlarmsViewModel instance to get required alarm properties to display as property values
-     - currentVC: current ViewController object where properties table is placed
-     - alarmId: ID of the alarm which poperties should be used
+         - indexPath: current index path of the table
+         - alarmsVM: current AlarmsViewModel instance to get required alarm properties to display as property values
+         - currentVC: current ViewController object where properties table is placed
+         - alarmId: ID of the alarm which poperties should be used
      */
     func performAction(for indexPath: IndexPath, using alarmsVM: AlarmsViewModel, on currentVC: UIViewController, alarmId: Int) {
         
