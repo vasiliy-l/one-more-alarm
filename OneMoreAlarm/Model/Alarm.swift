@@ -8,18 +8,14 @@
 
 import Foundation
 
-struct AlarmTime: Codable {
-    var hour: Int;
-    var minute: Int;
-}
-
 class Alarm: Codable {
-    var name = "Alarm"
-    var time: AlarmTime
+    var name: String
+    var date: Date
     var notificationRequestId: String?
     
-    init(hour: Int, minute: Int) {
-        time = AlarmTime(hour: hour, minute: minute)
+    init(name: String, date: Date) {
+        self.name = name
+        self.date = date
     }
 }
 
@@ -46,12 +42,29 @@ class AlarmsCollection: Codable {
     }
     
     /**
-     Append collection with new alarm instance
+     Append collection with new alarm instance set at 09:00
      
-     - returns: ID of created alarm object
+     - returns: ID of created alarm object or -1 if unable to add new alarm
      */
     func append() -> Int {
-        let alarm =  Alarm(hour: 09, minute: 00)
+        let calendar = Calendar.current
+        
+        // try to set default time
+        let dateWithSetTime = calendar.date(bySettingHour: 9, minute: 0, second: 0, of: Date())
+        guard let dateWithSetTimeUnwrapped = dateWithSetTime else {
+            return -1
+        }
+        
+        // then try to make the date after current time
+        let alarmDate = dateWithSetTimeUnwrapped < Date()
+            ? calendar.date(byAdding: .day, value: 1, to: dateWithSetTimeUnwrapped)
+            : dateWithSetTimeUnwrapped
+        guard let alarmDateUnwrapped = alarmDate else {
+            return -1
+        }
+        
+        // add new alarm object and return its index
+        let alarm =  Alarm(name: "Alarm", date: alarmDateUnwrapped)
         alarms.append(alarm)
         return alarms.count - 1
     }

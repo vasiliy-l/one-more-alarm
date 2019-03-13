@@ -45,6 +45,9 @@ class EditAlarmViewController: UIViewController {
     }
     
     @IBAction func saveButtonPressed(_ sender: Any) {
+        // save time explicitly, if the User did not interact with the time control
+        saveSelectedTime()
+        
         // remove old notification for current alarm, if any
         if let oldNatificationRequestId = alarmsViewModel.getAlarmNotificationRequestId(for: actualAlarmIndex) {
             appDelegate.notifications.unscheduleNotification(withRequestId: oldNatificationRequestId)
@@ -52,8 +55,8 @@ class EditAlarmViewController: UIViewController {
         
         // schedule new notification for current alarm
         let alarmName = alarmsViewModel.getAlarmName(for: actualAlarmIndex)
-        if let alarmTime = alarmsViewModel.getAlarmTime(for: actualAlarmIndex) {
-            let requestId = appDelegate.notifications.scheduleNotification(withText: alarmName, date: alarmTime)
+        if let alarmDate = alarmsViewModel.getAlarmDate(for: actualAlarmIndex) {
+            let requestId = appDelegate.notifications.scheduleNotification(withText: alarmName, date: alarmDate)
             alarmsViewModel.updateAlarm(for: actualAlarmIndex, norificationRequestId: requestId)
         }
         
@@ -65,7 +68,7 @@ class EditAlarmViewController: UIViewController {
      Updates time value of current alarm during interaction with time picker
      */
     @IBAction func saveSelectedTime() {
-        alarmsViewModel.updateAlarm(for: actualAlarmIndex, time: timePicker.date)
+        alarmsViewModel.updateAlarm(for: actualAlarmIndex, date: timePicker.date)
     }
     
     /**
@@ -78,8 +81,18 @@ class EditAlarmViewController: UIViewController {
         
         propertiesTableView.reloadData();
         
-        if let date = alarmsViewModel.getAlarmTime(for: actualAlarmIndex) {
-            timePicker.setDate(date, animated: false)
+        if let alarmDate = alarmsViewModel.getAlarmDate(for: actualAlarmIndex) {
+            let calendar = Calendar.current
+            let hour = calendar.component(.hour, from: alarmDate)
+            let minute = calendar.component(.minute, from: alarmDate)
+            
+            // always set current day for time picker
+            let timePickerDate = Calendar.current.date(
+                bySettingHour: hour, minute: minute, second: 0,
+                of: Date())
+            if let timePickerDateUnwrapped = timePickerDate {
+                timePicker.setDate(timePickerDateUnwrapped, animated: false)
+            }
         }
     }
 }

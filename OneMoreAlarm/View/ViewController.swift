@@ -72,7 +72,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         cell.nameLabel.text = alarmsViewModel.getAlarmName(for: indexPath.row)
-        cell.timeLabel.text = alarmsViewModel.getAlarmTimeString(for: indexPath.row)
+        cell.timeLabel.text = alarmsViewModel.getAlarmDateString(for: indexPath.row)
         
         return cell;
     }
