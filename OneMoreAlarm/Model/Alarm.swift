@@ -16,6 +16,7 @@ struct AlarmTime: Codable {
 class Alarm: Codable {
     var name = "Alarm"
     var time: AlarmTime
+    var notificationRequestId: String?
     
     init(hour: Int, minute: Int) {
         time = AlarmTime(hour: hour, minute: minute)

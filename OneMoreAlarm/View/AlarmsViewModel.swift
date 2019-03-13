@@ -81,6 +81,10 @@ class AlarmsViewModel {
         return date // TODO the same issue as above
     }
     
+    func getAlarmNotificationRequestId(for index: Int) -> String? {
+        return alarmsColection.get(at: index)?.notificationRequestId
+    }
+    
     func updateAlarm(for index: Int, name: String, time: Date) {
         updateAlarm(for: index, name: name)
         updateAlarm(for: index, time: time)
@@ -102,6 +106,14 @@ class AlarmsViewModel {
         let hour = Calendar.current.component(.hour, from: time)
         let minute = Calendar.current.component(.minute, from: time)
         alarm.time = AlarmTime(hour: hour, minute: minute)
+    }
+    
+    func updateAlarm(for index: Int, norificationRequestId: String?) {
+        guard let alarm = alarmsColection.get(at: index) else {
+            return
+        }
+        
+        alarm.notificationRequestId = norificationRequestId
     }
     
     func applyChanges() {

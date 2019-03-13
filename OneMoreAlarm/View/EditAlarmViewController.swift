@@ -10,6 +10,8 @@ import UIKit
 
 class EditAlarmViewController: UIViewController {
     
+    let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+    
     var alarmsViewModel: AlarmsViewModel!
     var propertiesTableViewModel: PropertiesTableViewModel!
     
@@ -43,7 +45,19 @@ class EditAlarmViewController: UIViewController {
     }
     
     @IBAction func saveButtonPressed(_ sender: Any) {
-        alarmsViewModel.applyChanges(); // save all changes
+        // remove old notification for current alarm, if any
+        if let oldNatificationRequestId = alarmsViewModel.getAlarmNotificationRequestId(for: actualAlarmIndex) {
+            appDelegate.notifications.unscheduleNotification(withRequestId: oldNatificationRequestId)
+        }
+        
+        // schedule new notification for current alarm
+        let alarmName = alarmsViewModel.getAlarmName(for: actualAlarmIndex)
+        if let alarmTime = alarmsViewModel.getAlarmTime(for: actualAlarmIndex) {
+            let requestId = appDelegate.notifications.scheduleNotification(withText: alarmName, date: alarmTime)
+            alarmsViewModel.updateAlarm(for: actualAlarmIndex, norificationRequestId: requestId)
+        }
+        
+        alarmsViewModel.applyChanges(); // store all changes
         navigationController?.popToRootViewController(animated: true)
     }
     
