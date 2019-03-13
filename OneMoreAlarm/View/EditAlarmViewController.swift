@@ -72,6 +72,10 @@ class EditAlarmViewController: UIViewController {
      Sets correct state of UI controls according to current alarm characteristics
      */
     func refreshUI() {
+        #if DEBUG
+          timePicker.minuteInterval = 1
+        #endif
+        
         propertiesTableView.reloadData();
         
         if let date = alarmsViewModel.getAlarmTime(for: actualAlarmIndex) {
