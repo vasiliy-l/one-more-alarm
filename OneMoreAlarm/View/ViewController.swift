@@ -41,22 +41,22 @@ class ViewController: UIViewController {
         alarmsTableView.reloadData();
     }
     
-    @IBAction func addAlarmButtonPressed(_ sender: Any) {
-        
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-
-        guard let destinationVC = mainStoryboard.instantiateViewController(withIdentifier: "EditAlarmViewController") as? EditAlarmViewController else {
-            print("Couldn't find the view controller")
-            return
-        }
-        navigationController?.pushViewController(destinationVC, animated: true)
+    @IBAction func addAlarmButtonPressed(_ sender: UIButton) {
         selectedAlarmIndex = nil
-        destinationVC.alarmsViewModel = alarmsViewModel
-        destinationVC.selectedAlarmIndexToEdit = selectedAlarmIndex
-
+        
+        performSegue(withIdentifier: "goToAlarmDetailsView", sender: self)
         //let _ = appDelegate.notifications.scheduleNotification(withText: "Simple notification text", timeInterval: 5)
     }
-
+    
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destVC = segue.destination as? EditAlarmViewController {
+            destVC.alarmsViewModel = alarmsViewModel
+            destVC.selectedAlarmIndexToEdit = selectedAlarmIndex
+        }
+    }
 }
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
