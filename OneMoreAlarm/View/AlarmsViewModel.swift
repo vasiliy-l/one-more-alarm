@@ -14,7 +14,6 @@ class AlarmsViewModel {
     let userDefaults = UserDefaults.standard;
     
     var alarmsColection: AlarmsCollection!
-    var newAlarm: Alarm?
     
     init() {
         loadData()
@@ -63,45 +62,78 @@ class AlarmsViewModel {
         return alarm.name
     }
     
-    func getAlarmTimeString(for index: Int) -> String {
+    func getAlarmDateString(for index: Int) -> String {
         guard let alarm = alarmsColection.get(at: index) else { // when no alarm by given index
             return ""
         }
         
-        return String(format: "%02d:%02d", alarm.time.hour, alarm.time.minute)
+        // prepare required formatters
+        let timeFormatter = DateFormatter()
+        timeFormatter.setLocalizedDateFormatFromTemplate("HH:mm")
+        let dateTimeFormatter = DateFormatter()
+        dateTimeFormatter.setLocalizedDateFormatFromTemplate("dd MMM, HH:mm")
+        
+        // calculate difference in days
+        let calendar = Calendar.current
+        let daysDifference =
+            calendar.component(.day, from: alarm.date)
+                - calendar.component(.day, from: Date())
+        
+        switch daysDifference {
+        case 0:
+            return timeFormatter.string(from: alarm.date)
+        case 1:
+            return "Tomorrow, \(timeFormatter.string(from: alarm.date))"
+        default:
+            return dateTimeFormatter.string(from: alarm.date)
+        }
     }
     
-    func getAlarmTime(for index: Int) -> Date? {
+    func getAlarmDate(for index: Int) -> Date? {
         guard let alarm = alarmsColection.get(at: index) else {
             return nil
         }
-        
-        let alarmTime = alarm.time
-        let date = Calendar.current.date(bySettingHour: alarmTime.hour, minute: alarmTime.minute, second: 0, of: Date())
-        return date // TODO the same issue as above
+        return alarm.date
     }
     
-    func updateAlarm(for index: Int, name: String, time: Date) {
+    func getAlarmNotificationRequestId(for index: Int) -> String? {
+        return alarmsColection.get(at: index)?.notificationRequestId
+    }
+    
+    func updateAlarm(for index: Int, name: String, date: Date) {
         updateAlarm(for: index, name: name)
-        updateAlarm(for: index, time: time)
+        updateAlarm(for: index, date: date)
     }
     
     func updateAlarm(for index: Int, name: String) {
         guard let alarm = alarmsColection.get(at: index) else {
             return
         }
-        
         alarm.name = name
     }
     
-    func updateAlarm(for index: Int, time: Date) {
+    func updateAlarm(for index: Int, date: Date) {
         guard let alarm = alarmsColection.get(at: index) else {
             return
         }
         
-        let hour = Calendar.current.component(.hour, from: time)
-        let minute = Calendar.current.component(.minute, from: time)
-        alarm.time = AlarmTime(hour: hour, minute: minute)
+        // correct date to make sure that alarm will be set in future
+        let calendar = Calendar.current
+        let correctedDate = date < Date()
+            ? calendar.date(byAdding: .day, value: 1, to: date)
+            : date
+        
+        guard let correctedDateUnwrapped = correctedDate else {
+            return
+        }
+        alarm.date = correctedDateUnwrapped
+    }
+    
+    func updateAlarm(for index: Int, norificationRequestId: String?) {
+        guard let alarm = alarmsColection.get(at: index) else {
+            return
+        }
+        alarm.notificationRequestId = norificationRequestId
     }
     
     func applyChanges() {

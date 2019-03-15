@@ -10,6 +10,8 @@ import UIKit
 
 class EditAlarmViewController: UIViewController {
     
+    let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+    
     var alarmsViewModel: AlarmsViewModel!
     var propertiesTableViewModel: PropertiesTableViewModel!
     
@@ -43,7 +45,22 @@ class EditAlarmViewController: UIViewController {
     }
     
     @IBAction func saveButtonPressed(_ sender: Any) {
-        alarmsViewModel.applyChanges(); // save all changes
+        // save time explicitly, if the User did not interact with the time control
+        saveSelectedTime()
+        
+        // remove old notification for current alarm, if any
+        if let oldNatificationRequestId = alarmsViewModel.getAlarmNotificationRequestId(for: actualAlarmIndex) {
+            appDelegate.notifications.unscheduleNotification(withRequestId: oldNatificationRequestId)
+        }
+        
+        // schedule new notification for current alarm
+        let alarmName = alarmsViewModel.getAlarmName(for: actualAlarmIndex)
+        if let alarmDate = alarmsViewModel.getAlarmDate(for: actualAlarmIndex) {
+            let requestId = appDelegate.notifications.scheduleNotification(withText: alarmName, date: alarmDate)
+            alarmsViewModel.updateAlarm(for: actualAlarmIndex, norificationRequestId: requestId)
+        }
+        
+        alarmsViewModel.applyChanges(); // store all changes
         navigationController?.popToRootViewController(animated: true)
     }
     
@@ -51,17 +68,31 @@ class EditAlarmViewController: UIViewController {
      Updates time value of current alarm during interaction with time picker
      */
     @IBAction func saveSelectedTime() {
-        alarmsViewModel.updateAlarm(for: actualAlarmIndex, time: timePicker.date)
+        alarmsViewModel.updateAlarm(for: actualAlarmIndex, date: timePicker.date)
     }
     
     /**
      Sets correct state of UI controls according to current alarm characteristics
      */
     func refreshUI() {
+        #if DEBUG
+          timePicker.minuteInterval = 1
+        #endif
+        
         propertiesTableView.reloadData();
         
-        if let date = alarmsViewModel.getAlarmTime(for: actualAlarmIndex) {
-            timePicker.setDate(date, animated: false)
+        if let alarmDate = alarmsViewModel.getAlarmDate(for: actualAlarmIndex) {
+            let calendar = Calendar.current
+            let hour = calendar.component(.hour, from: alarmDate)
+            let minute = calendar.component(.minute, from: alarmDate)
+            
+            // always set current day for time picker
+            let timePickerDate = Calendar.current.date(
+                bySettingHour: hour, minute: minute, second: 0,
+                of: Date())
+            if let timePickerDateUnwrapped = timePickerDate {
+                timePicker.setDate(timePickerDateUnwrapped, animated: false)
+            }
         }
     }
 }

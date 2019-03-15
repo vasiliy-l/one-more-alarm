@@ -50,6 +50,32 @@ class Notifications: NSObject {
         }
     }
     
+    func scheduleNotification(withText: String, date: Date) -> String {
+        requestPermissions()
+        
+        let content = UNMutableNotificationContent()
+        content.body = withText
+        content.sound = UNNotificationSound.default
+        content.categoryIdentifier = Category.alarm
+        
+        var notificationDate = DateComponents()
+        notificationDate.hour = Calendar.current.component(.hour, from: date)
+        notificationDate.minute = Calendar.current.component(.minute, from: date)
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: notificationDate, repeats: false)
+        
+        let requestId = UUID().uuidString
+        let request = UNNotificationRequest(identifier: requestId, content: content, trigger: trigger)
+        
+        notificationCenter.add(request) { error in
+            if error != nil {
+                print("Unable to schedule notification. \(error!.localizedDescription)")
+            }
+        }
+        
+        return requestId
+    }
+    
     func scheduleNotification(withText: String, timeInterval: TimeInterval) -> String? {
         requestPermissions()
         
@@ -73,8 +99,8 @@ class Notifications: NSObject {
         return requestId
     }
     
-    func unscheduleNotification(withRequestID: String) {
-        notificationCenter.removePendingNotificationRequests(withIdentifiers: [withRequestID])
+    func unscheduleNotification(withRequestId: String) {
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: [withRequestId])
     }
 }
 

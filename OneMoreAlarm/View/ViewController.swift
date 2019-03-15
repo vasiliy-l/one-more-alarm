@@ -72,7 +72,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         cell.nameLabel.text = alarmsViewModel.getAlarmName(for: indexPath.row)
-        cell.timeLabel.text = alarmsViewModel.getAlarmTimeString(for: indexPath.row)
+        cell.timeLabel.text = alarmsViewModel.getAlarmDateString(for: indexPath.row)
         
         return cell;
     }
@@ -87,6 +87,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let removeAction = UITableViewRowAction(style: .destructive, title: "Remove") { (_, indexPath) in
+            
+            if let notificationRequestId = self.alarmsViewModel.getAlarmNotificationRequestId(for: indexPath.row) {
+                self.appDelegate.notifications.unscheduleNotification(withRequestId: notificationRequestId)
+            }
+            
             self.alarmsViewModel.removeAlarm(at: indexPath.row)
             self.alarmsViewModel.applyChanges()
             
