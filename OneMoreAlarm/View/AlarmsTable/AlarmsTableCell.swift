@@ -12,6 +12,7 @@ class AlarmsTableCell: UITableViewCell {
 
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var timeLabel: UILabel!
+    @IBOutlet var statusSwitch: UISwitch!
     
     
     override func awakeFromNib() {
