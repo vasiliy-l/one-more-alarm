@@ -27,7 +27,7 @@
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Tomorrow, 09:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h43-HY-EJb">
                         <rect key="frame" x="91" y="11.5" width="213" height="25.5"/>
-                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="21"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="27"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>

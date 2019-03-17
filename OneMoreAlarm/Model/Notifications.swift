@@ -106,28 +106,18 @@ class Notifications: NSObject {
         notificationCenter.removePendingNotificationRequests(withIdentifiers: [withRequestId])
     }
     
-    func getUnrespondedNotifications() -> [String] {
-        var requestIdentifiers = [String]()
-        
+    func processUnrespondedNotifications(task: @escaping (_ notificationRequestIDs: [String]) -> ()) {
         notificationCenter.getDeliveredNotifications { notifications in
-            notifications.forEach({ notification in
-                requestIdentifiers.append(notification.request.identifier)
-            })
+            let identifiers = notifications.map({ $0.request.identifier })
+            task(identifiers)
         }
-        
-        return requestIdentifiers
     }
     
-    func getScheduledNotifications() -> [String] {
-        var requestIdentifiers = [String]()
-        
-        notificationCenter.getPendingNotificationRequests { requests in
-            requests.forEach({ request in
-                requestIdentifiers.append(request.identifier)
-            })
+    func processScheduledNotifications(task: @escaping (_ notificationRequestIDs: [String]) -> ()) {
+        notificationCenter.getPendingNotificationRequests { notifications in
+            let identifiers = notifications.map({ $0.identifier })
+            task(identifiers)
         }
-        
-        return requestIdentifiers
     }
 }
 

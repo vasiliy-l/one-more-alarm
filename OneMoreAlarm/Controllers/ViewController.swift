@@ -18,9 +18,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // update status of existing alarms
-        updateAlarmsData()
-        
         // Configure table with alarms
         alarmsTableView.register(AlarmsTableCell.nib, forCellReuseIdentifier: AlarmsTableCell.identifier)
         alarmsTableView.dataSource = self
@@ -32,6 +29,7 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        updateAlarmsData()
         refreshUI();
     }
     
@@ -40,26 +38,44 @@ class ViewController: UIViewController {
     }
     
     func updateAlarmsData() {
-        let existingAlarms = AlarmsStorage.current.alarmIndexes
-        
-        let unrespondedNotifications = Notifications.current.getUnrespondedNotifications()
-        let scheduledNotifications = Notifications.current.getScheduledNotifications()
-        
-        existingAlarms.forEach { alarmId in
-            var newStatus = AlarmStatus.Off
+        Notifications.current.processScheduledNotifications { (scheduledIdentifiers) in
+            // update completed/incompleted notifications
+            let existingAlarms = AlarmsStorage.current.alarmIndexes
             
-            if let notificationId = AlarmsStorage.current.getNotificationRequestId(for: alarmId) {
-                if unrespondedNotifications.contains(notificationId) {
-                    newStatus = .Skipped
-                } else if scheduledNotifications.contains(notificationId) {
-                    newStatus = .On
+            existingAlarms.forEach({ alarmId in
+                var newStatus = AlarmStatus.Off
+                
+                if let notificationId = AlarmsStorage.current.getNotificationRequestId(for: alarmId) {
+                    if scheduledIdentifiers.contains(notificationId) {
+                        newStatus = .On
+                    }
                 }
-            }
+                
+                AlarmsStorage.current.updateAlarm(for: alarmId, status: newStatus)
+            })
+            AlarmsStorage.current.saveChanges()
             
-            AlarmsStorage.current.updateAlarm(for: alarmId, status: newStatus)
+            // then, update unresponsed notifications
+            Notifications.current.processUnrespondedNotifications(task: { (unrespondedIdentifiers) in
+                let existingAlarms = AlarmsStorage.current.alarmIndexes
+                
+                existingAlarms.forEach({ alarmId in
+                    var newStatus: AlarmStatus?
+                    
+                    if let notificationId = AlarmsStorage.current.getNotificationRequestId(for: alarmId) {
+                        if unrespondedIdentifiers.contains(notificationId) {
+                            newStatus = .Skipped
+                        }
+                    }
+                    
+                    if let newStatus = newStatus {
+                        AlarmsStorage.current.updateAlarm(for: alarmId, status: newStatus)
+                    }
+                })
+                
+                AlarmsStorage.current.saveChanges()
+            })
         }
-        
-        AlarmsStorage.current.saveChanges()
     }
     
     @IBAction func addAlarmButtonPressed(_ sender: UIButton) {

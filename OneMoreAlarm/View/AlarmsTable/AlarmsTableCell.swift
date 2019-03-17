@@ -64,10 +64,15 @@ class AlarmsTableCell: UITableViewCell {
         if let oldNotification = AlarmsStorage.current.getNotificationRequestId(for: currentAlarmId) {
             Notifications.current.unscheduleNotification(withRequestId: oldNotification)
         }
-        if sender.isOn,
-           let date = AlarmsStorage.current.getDate(for: currentAlarmId) {
-            let text = AlarmsStorage.current.getName(for: currentAlarmId)
-            newNotification = Notifications.current.scheduleNotification(withText: text, date: date)
+        if sender.isOn {
+            if let oldDate = AlarmsStorage.current.getDate(for: currentAlarmId) {
+                AlarmsStorage.current.updateAlarm(for: currentAlarmId, date: oldDate)
+            }
+            
+            if let date = AlarmsStorage.current.getDate(for: currentAlarmId) {
+                let text = AlarmsStorage.current.getName(for: currentAlarmId)
+                newNotification = Notifications.current.scheduleNotification(withText: text, date: date)
+            }
         }
         
         // update stored settings
