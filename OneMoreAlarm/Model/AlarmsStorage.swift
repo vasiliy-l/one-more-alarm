@@ -36,6 +36,16 @@ class AlarmsStorage {
         }
     }
     
+    var alarmIndexes: [Int] {
+        get {
+            if alarmsColection.count > 0 {
+                return Array(0...alarmsColection.count - 1)
+            } else {
+                return []
+            }
+        }
+    }
+    
     /**
      - returns: amount of existing alarms, including unsaved
      */

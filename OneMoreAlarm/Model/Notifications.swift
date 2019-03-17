@@ -105,6 +105,30 @@ class Notifications: NSObject {
     func unscheduleNotification(withRequestId: String) {
         notificationCenter.removePendingNotificationRequests(withIdentifiers: [withRequestId])
     }
+    
+    func getUnrespondedNotifications() -> [String] {
+        var requestIdentifiers = [String]()
+        
+        notificationCenter.getDeliveredNotifications { notifications in
+            notifications.forEach({ notification in
+                requestIdentifiers.append(notification.request.identifier)
+            })
+        }
+        
+        return requestIdentifiers
+    }
+    
+    func getScheduledNotifications() -> [String] {
+        var requestIdentifiers = [String]()
+        
+        notificationCenter.getPendingNotificationRequests { requests in
+            requests.forEach({ request in
+                requestIdentifiers.append(request.identifier)
+            })
+        }
+        
+        return requestIdentifiers
+    }
 }
 
 extension Notifications: UNUserNotificationCenterDelegate {

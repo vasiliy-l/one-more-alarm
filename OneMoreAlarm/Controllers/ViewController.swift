@@ -18,6 +18,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // update status of existing alarms
+        updateAlarmsData()
+        
         // Configure table with alarms
         alarmsTableView.register(AlarmsTableCell.nib, forCellReuseIdentifier: AlarmsTableCell.identifier)
         alarmsTableView.dataSource = self
@@ -34,6 +37,29 @@ class ViewController: UIViewController {
     
     func refreshUI() {
         alarmsTableView.reloadData();
+    }
+    
+    func updateAlarmsData() {
+        let existingAlarms = AlarmsStorage.current.alarmIndexes
+        
+        let unrespondedNotifications = Notifications.current.getUnrespondedNotifications()
+        let scheduledNotifications = Notifications.current.getScheduledNotifications()
+        
+        existingAlarms.forEach { alarmId in
+            var newStatus = AlarmStatus.Off
+            
+            if let notificationId = AlarmsStorage.current.getNotificationRequestId(for: alarmId) {
+                if unrespondedNotifications.contains(notificationId) {
+                    newStatus = .Skipped
+                } else if scheduledNotifications.contains(notificationId) {
+                    newStatus = .On
+                }
+            }
+            
+            AlarmsStorage.current.updateAlarm(for: alarmId, status: newStatus)
+        }
+        
+        AlarmsStorage.current.saveChanges()
     }
     
     @IBAction func addAlarmButtonPressed(_ sender: UIButton) {
