@@ -11,11 +11,13 @@ import Foundation
 class Alarm: Codable {
     var name: String
     var date: Date
+    var status: AlarmStatus
     var notificationRequestId: String?
     
     init(name: String, date: Date) {
         self.name = name
         self.date = date
+        self.status = .Off
     }
 }
 

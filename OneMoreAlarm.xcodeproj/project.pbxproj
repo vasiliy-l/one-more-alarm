@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D464ADD223E71B9004420CB /* AlarmStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D464ADC223E71B9004420CB /* AlarmStatus.swift */; };
+		3D464ADF223E93E3004420CB /* Bool+AlarmStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D464ADE223E93E3004420CB /* Bool+AlarmStatus.swift */; };
 		3D56E06E22353F45009DE156 /* PropertiesTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D56E06D22353F45009DE156 /* PropertiesTableViewModel.swift */; };
 		3D5A7182221977FA008EEC73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5A7181221977FA008EEC73 /* AppDelegate.swift */; };
 		3D5A7184221977FA008EEC73 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5A7183221977FA008EEC73 /* ViewController.swift */; };
@@ -18,7 +20,7 @@
 		3D98081822344BFC00D1CFDA /* AlarmsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D98081622344BFC00D1CFDA /* AlarmsTableCell.swift */; };
 		3D98081922344BFC00D1CFDA /* AlarmsTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D98081722344BFC00D1CFDA /* AlarmsTableCell.xib */; };
 		3D98081C223455B700D1CFDA /* EditAlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D98081B223455B700D1CFDA /* EditAlarmViewController.swift */; };
-		3D98081E2234567000D1CFDA /* AlarmsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D98081D2234567000D1CFDA /* AlarmsViewModel.swift */; };
+		3D98081E2234567000D1CFDA /* AlarmsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D98081D2234567000D1CFDA /* AlarmsStorage.swift */; };
 		3D9808232234676600D1CFDA /* TextEditTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9808212234676600D1CFDA /* TextEditTableCell.swift */; };
 		3D9808242234676600D1CFDA /* TextEditTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D9808222234676600D1CFDA /* TextEditTableCell.xib */; };
 		3DD816642235B8BD00581955 /* ClockHand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD816612235B8BD00581955 /* ClockHand.swift */; };
@@ -27,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D464ADC223E71B9004420CB /* AlarmStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmStatus.swift; sourceTree = "<group>"; };
+		3D464ADE223E93E3004420CB /* Bool+AlarmStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+AlarmStatus.swift"; sourceTree = "<group>"; };
 		3D56E06D22353F45009DE156 /* PropertiesTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesTableViewModel.swift; sourceTree = "<group>"; };
 		3D5A717E221977FA008EEC73 /* OneMoreAlarm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneMoreAlarm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D5A7181221977FA008EEC73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -40,7 +44,7 @@
 		3D98081622344BFC00D1CFDA /* AlarmsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsTableCell.swift; sourceTree = "<group>"; };
 		3D98081722344BFC00D1CFDA /* AlarmsTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlarmsTableCell.xib; sourceTree = "<group>"; };
 		3D98081B223455B700D1CFDA /* EditAlarmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAlarmViewController.swift; sourceTree = "<group>"; };
-		3D98081D2234567000D1CFDA /* AlarmsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsViewModel.swift; sourceTree = "<group>"; };
+		3D98081D2234567000D1CFDA /* AlarmsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmsStorage.swift; sourceTree = "<group>"; };
 		3D9808212234676600D1CFDA /* TextEditTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditTableCell.swift; sourceTree = "<group>"; };
 		3D9808222234676600D1CFDA /* TextEditTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextEditTableCell.xib; sourceTree = "<group>"; };
 		3DD816612235B8BD00581955 /* ClockHand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClockHand.swift; sourceTree = "<group>"; };
@@ -59,6 +63,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D464AE0223E984D004420CB /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				3D5A7183221977FA008EEC73 /* ViewController.swift */,
+				3D98081B223455B700D1CFDA /* EditAlarmViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		3D56E06C22353905009DE156 /* PropertiesTable */ = {
 			isa = PBXGroup;
 			children = (
@@ -87,14 +100,14 @@
 		3D5A7180221977FA008EEC73 /* OneMoreAlarm */ = {
 			isa = PBXGroup;
 			children = (
-				3D98081522344BD700D1CFDA /* View */,
 				3D88BC3D2233E89300A69E4B /* Model */,
+				3D98081522344BD700D1CFDA /* View */,
+				3D464AE0223E984D004420CB /* Controllers */,
 				3D5A7181221977FA008EEC73 /* AppDelegate.swift */,
 				3D5A7185221977FA008EEC73 /* Main.storyboard */,
 				3D5A7188221977FB008EEC73 /* Assets.xcassets */,
 				3D5A718A221977FB008EEC73 /* LaunchScreen.storyboard */,
 				3D5A718D221977FB008EEC73 /* Info.plist */,
-				3D8D668C222C586C0002FE05 /* Notifications.swift */,
 			);
 			path = OneMoreAlarm;
 			sourceTree = "<group>";
@@ -102,7 +115,11 @@
 		3D88BC3D2233E89300A69E4B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3D8D668C222C586C0002FE05 /* Notifications.swift */,
+				3D98081D2234567000D1CFDA /* AlarmsStorage.swift */,
 				3D88BC3E2233E8B200A69E4B /* Alarm.swift */,
+				3D464ADC223E71B9004420CB /* AlarmStatus.swift */,
+				3D464ADE223E93E3004420CB /* Bool+AlarmStatus.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -111,12 +128,9 @@
 			isa = PBXGroup;
 			children = (
 				3DD816602235B8A200581955 /* Clock */,
-				3D98081D2234567000D1CFDA /* AlarmsViewModel.swift */,
 				3D56E06D22353F45009DE156 /* PropertiesTableViewModel.swift */,
 				3D98081A2234557E00D1CFDA /* AlarmsTable */,
 				3D56E06C22353905009DE156 /* PropertiesTable */,
-				3D5A7183221977FA008EEC73 /* ViewController.swift */,
-				3D98081B223455B700D1CFDA /* EditAlarmViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -214,7 +228,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D98081822344BFC00D1CFDA /* AlarmsTableCell.swift in Sources */,
+				3D464ADD223E71B9004420CB /* AlarmStatus.swift in Sources */,
 				3DD816662235B8BD00581955 /* ClockFace.swift in Sources */,
+				3D464ADF223E93E3004420CB /* Bool+AlarmStatus.swift in Sources */,
 				3D8D668D222C586C0002FE05 /* Notifications.swift in Sources */,
 				3D56E06E22353F45009DE156 /* PropertiesTableViewModel.swift in Sources */,
 				3D5A7184221977FA008EEC73 /* ViewController.swift in Sources */,
@@ -222,7 +238,7 @@
 				3D98081C223455B700D1CFDA /* EditAlarmViewController.swift in Sources */,
 				3D9808232234676600D1CFDA /* TextEditTableCell.swift in Sources */,
 				3DD816642235B8BD00581955 /* ClockHand.swift in Sources */,
-				3D98081E2234567000D1CFDA /* AlarmsViewModel.swift in Sources */,
+				3D98081E2234567000D1CFDA /* AlarmsStorage.swift in Sources */,
 				3D88BC3F2233E8B200A69E4B /* Alarm.swift in Sources */,
 				3DD816652235B8BD00581955 /* ClockView.swift in Sources */,
 			);

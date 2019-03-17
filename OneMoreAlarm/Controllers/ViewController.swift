@@ -10,18 +10,13 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-    
     @IBOutlet var alarmsTableView: UITableView!
     @IBOutlet var clockView: ClockView!
     
-    var alarmsViewModel: AlarmsViewModel!
     var selectedAlarmIndex: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        alarmsViewModel = AlarmsViewModel()
         
         // Configure table with alarms
         alarmsTableView.register(AlarmsTableCell.nib, forCellReuseIdentifier: AlarmsTableCell.identifier)
@@ -53,7 +48,6 @@ class ViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destVC = segue.destination as? EditAlarmViewController {
-            destVC.alarmsViewModel = alarmsViewModel
             destVC.selectedAlarmIndexToEdit = selectedAlarmIndex
         }
     }
@@ -62,7 +56,7 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return alarmsViewModel.getAlarmsAmount()
+        return AlarmsStorage.current.getAlarmsAmount()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -70,9 +64,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AlarmsTableCell.identifier, for: indexPath) as? AlarmsTableCell else {
             return UITableViewCell()
         }
-        
-        cell.nameLabel.text = alarmsViewModel.getAlarmName(for: indexPath.row)
-        cell.timeLabel.text = alarmsViewModel.getAlarmDateString(for: indexPath.row)
+        cell.alarmId = indexPath.row
         
         return cell;
     }
@@ -87,14 +79,15 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let removeAction = UITableViewRowAction(style: .destructive, title: "Remove") { (_, indexPath) in
-            
-            if let notificationRequestId = self.alarmsViewModel.getAlarmNotificationRequestId(for: indexPath.row) {
-                self.appDelegate.notifications.unscheduleNotification(withRequestId: notificationRequestId)
+            // remove notification
+            if let notificationRequestId = AlarmsStorage.current.getNotificationRequestId(for: indexPath.row) {
+                Notifications.current.unscheduleNotification(withRequestId: notificationRequestId)
             }
+            // and save changes
+            AlarmsStorage.current.removeAlarm(at: indexPath.row)
+            AlarmsStorage.current.saveChanges()
             
-            self.alarmsViewModel.removeAlarm(at: indexPath.row)
-            self.alarmsViewModel.applyChanges()
-            
+            // animate changes
             tableView.beginUpdates()
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()

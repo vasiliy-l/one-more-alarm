@@ -10,9 +10,6 @@ import UIKit
 
 class EditAlarmViewController: UIViewController {
     
-    let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-    
-    var alarmsViewModel: AlarmsViewModel!
     var propertiesTableViewModel: PropertiesTableViewModel!
     
     var selectedAlarmIndexToEdit: Int?
@@ -34,14 +31,14 @@ class EditAlarmViewController: UIViewController {
         if let alarmIndex = selectedAlarmIndexToEdit {
             actualAlarmIndex = alarmIndex
         } else {
-            actualAlarmIndex = alarmsViewModel.addAlarm()
+            actualAlarmIndex = AlarmsStorage.current.addAlarm()
         }
         
         refreshUI();
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        alarmsViewModel.discardChanges() // discard all unsaved changes
+        AlarmsStorage.current.discardChanges() // discard all unsaved changes
     }
     
     @IBAction func saveButtonPressed(_ sender: Any) {
@@ -49,18 +46,20 @@ class EditAlarmViewController: UIViewController {
         saveSelectedTime()
         
         // remove old notification for current alarm, if any
-        if let oldNatificationRequestId = alarmsViewModel.getAlarmNotificationRequestId(for: actualAlarmIndex) {
-            appDelegate.notifications.unscheduleNotification(withRequestId: oldNatificationRequestId)
+        if let oldNatification = AlarmsStorage.current.getNotificationRequestId(for: actualAlarmIndex) {
+            Notifications.current.unscheduleNotification(withRequestId: oldNatification)
         }
         
         // schedule new notification for current alarm
-        let alarmName = alarmsViewModel.getAlarmName(for: actualAlarmIndex)
-        if let alarmDate = alarmsViewModel.getAlarmDate(for: actualAlarmIndex) {
-            let requestId = appDelegate.notifications.scheduleNotification(withText: alarmName, date: alarmDate)
-            alarmsViewModel.updateAlarm(for: actualAlarmIndex, norificationRequestId: requestId)
+        let alarmName = AlarmsStorage.current.getName(for: actualAlarmIndex)
+        if let alarmDate = AlarmsStorage.current.getDate(for: actualAlarmIndex) {
+            let requestId = Notifications.current.scheduleNotification(withText: alarmName, date: alarmDate)
+            AlarmsStorage.current.updateAlarm(for: actualAlarmIndex, notificationRequestId: requestId)
+            AlarmsStorage.current.updateAlarm(for: actualAlarmIndex, status: .On)
         }
         
-        alarmsViewModel.applyChanges(); // store all changes
+        AlarmsStorage.current.saveChanges() // store all changes
+        
         navigationController?.popToRootViewController(animated: true)
     }
     
@@ -68,7 +67,7 @@ class EditAlarmViewController: UIViewController {
      Updates time value of current alarm during interaction with time picker
      */
     @IBAction func saveSelectedTime() {
-        alarmsViewModel.updateAlarm(for: actualAlarmIndex, date: timePicker.date)
+        AlarmsStorage.current.updateAlarm(for: actualAlarmIndex, date: timePicker.date)
     }
     
     /**
@@ -81,7 +80,7 @@ class EditAlarmViewController: UIViewController {
         
         propertiesTableView.reloadData();
         
-        if let alarmDate = alarmsViewModel.getAlarmDate(for: actualAlarmIndex) {
+        if let alarmDate = AlarmsStorage.current.getDate(for: actualAlarmIndex) {
             let calendar = Calendar.current
             let hour = calendar.component(.hour, from: alarmDate)
             let minute = calendar.component(.minute, from: alarmDate)
@@ -105,12 +104,12 @@ extension EditAlarmViewController: UITableViewDataSource, UITableViewDelegate {
     
     // Display properties in table
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return propertiesTableViewModel.prepareCell(for: indexPath, using: alarmsViewModel, alarmId: actualAlarmIndex)
+        return propertiesTableViewModel.prepareCell(for: indexPath, alarmId: actualAlarmIndex)
     }
     
     // Interact with user to update property value on selection from table
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        propertiesTableViewModel.performAction(for: indexPath, using: alarmsViewModel, on: self, alarmId: actualAlarmIndex)
+        propertiesTableViewModel.performAction(for: indexPath, on: self, alarmId: actualAlarmIndex)
     }
     
 }

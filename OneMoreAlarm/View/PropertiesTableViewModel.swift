@@ -34,10 +34,9 @@ class PropertiesTableViewModel {
      
      - parameters:
          - indexPath: current index path of the table
-         - alarmsVM: current AlarmsViewModel instance to get required alarm properties to display as property values
          - alarmId: ID of the alarm which poperties should be used
      */
-    func prepareCell(for indexPath: IndexPath, using alarmsVM: AlarmsViewModel, alarmId: Int) -> UITableViewCell {
+    func prepareCell(for indexPath: IndexPath, alarmId: Int) -> UITableViewCell {
         guard let property = AlarmProperty.init(rawValue: indexPath.row) else {
             return UITableViewCell()
         }
@@ -49,7 +48,7 @@ class PropertiesTableViewModel {
             }
             
             cell.nameLabel.text = property.propertyName()
-            cell.valueLabel.text = alarmsVM.getAlarmName(for: alarmId)
+            cell.valueLabel.text = AlarmsStorage.current.getName(for: alarmId)
             
             return cell
         }
@@ -60,11 +59,10 @@ class PropertiesTableViewModel {
      
      - parameters:
          - indexPath: current index path of the table
-         - alarmsVM: current AlarmsViewModel instance to get required alarm properties to display as property values
          - currentVC: current ViewController object where properties table is placed
          - alarmId: ID of the alarm which poperties should be used
      */
-    func performAction(for indexPath: IndexPath, using alarmsVM: AlarmsViewModel, on currentVC: UIViewController, alarmId: Int) {
+    func performAction(for indexPath: IndexPath, on currentVC: UIViewController, alarmId: Int) {
         
         guard let property = AlarmProperty.init(rawValue: indexPath.row) else {
             return
@@ -78,7 +76,7 @@ class PropertiesTableViewModel {
                 preferredStyle: .alert)
             
             editNameAlert.addTextField { (textField) in
-                let currentAlarmName = alarmsVM.getAlarmName(for: alarmId)
+                let currentAlarmName = AlarmsStorage.current.getName(for: alarmId)
                 textField.text = currentAlarmName
             }
             
@@ -86,7 +84,7 @@ class PropertiesTableViewModel {
                 if let textField = editNameAlert.textFields?[0],
                     let newAlarmName = textField.text,
                     newAlarmName.count > 0 { // update name only if not empty
-                    alarmsVM.updateAlarm(for: alarmId, name: newAlarmName)
+                    AlarmsStorage.current.updateAlarm(for: alarmId, name: newAlarmName)
                 }
                 
                 self.tableView.reloadData()

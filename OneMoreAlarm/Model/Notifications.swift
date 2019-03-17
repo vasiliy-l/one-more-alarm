@@ -10,6 +10,8 @@ import Foundation
 import UserNotifications
 
 class Notifications: NSObject {
+    private(set) static var current: Notifications!
+    
     var notificationCenter = UNUserNotificationCenter.current()
     
     struct Action {
@@ -22,8 +24,8 @@ class Notifications: NSObject {
         static let alarm = "ALARM_NOTIFICATION"
     }
     
-    override init() {
-        super.init()
+    static func prepare() {
+        Notifications.current = Notifications()
         
         let openAction = UNNotificationAction(identifier: Action.open, title: "Open App", options: [.foreground])
         let confirmAction = UNNotificationAction(identifier: Action.confirm, title: "Confirm", options: [.destructive])
@@ -31,10 +33,11 @@ class Notifications: NSObject {
         let actions = [openAction, confirmAction, snoozeAction]
         
         let notificationCategory = UNNotificationCategory(identifier: Category.alarm, actions: actions, intentIdentifiers: [], hiddenPreviewsBodyPlaceholder: "%u alarms", options: .customDismissAction)
+        Notifications.current.notificationCenter.setNotificationCategories([notificationCategory])
         
-        notificationCenter.setNotificationCategories([notificationCategory])
+        Notifications.current.notificationCenter.delegate = Notifications.current
     }
-    
+
     func requestPermissions() {
         notificationCenter.getNotificationSettings { [unowned notificationCenter] settings in
             guard settings.authorizationStatus != .authorized else {

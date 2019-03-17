@@ -10,12 +10,17 @@ import Foundation
 
 fileprivate let kAlarmsCollection = "UserAlarms"
 
-class AlarmsViewModel {
-    let userDefaults = UserDefaults.standard;
+class AlarmsStorage {
+    private(set) static var current: AlarmsStorage!
     
+    let userDefaults = UserDefaults.standard;
     var alarmsColection: AlarmsCollection!
     
-    init() {
+    static func prepareStorage() {
+        AlarmsStorage.current = AlarmsStorage()
+    }
+    
+    private init() {
         loadData()
     }
     
@@ -55,14 +60,14 @@ class AlarmsViewModel {
         alarmsColection.remove(at: index)
     }
     
-    func getAlarmName(for index: Int) -> String {
+    func getName(for index: Int) -> String {
         guard let alarm = alarmsColection.get(at: index) else { // when no alarm by given index
             return ""
         }
         return alarm.name
     }
     
-    func getAlarmDateString(for index: Int) -> String {
+    func getDateString(for index: Int) -> String {
         guard let alarm = alarmsColection.get(at: index) else { // when no alarm by given index
             return ""
         }
@@ -89,15 +94,22 @@ class AlarmsViewModel {
         }
     }
     
-    func getAlarmDate(for index: Int) -> Date? {
+    func getDate(for index: Int) -> Date? {
         guard let alarm = alarmsColection.get(at: index) else {
             return nil
         }
         return alarm.date
     }
     
-    func getAlarmNotificationRequestId(for index: Int) -> String? {
+    func getNotificationRequestId(for index: Int) -> String? {
         return alarmsColection.get(at: index)?.notificationRequestId
+    }
+    
+    func getStatus(for index: Int) -> AlarmStatus? {
+        guard let alarm = alarmsColection.get(at: index) else {
+            return nil
+        }
+        return alarm.status
     }
     
     func updateAlarm(for index: Int, name: String, date: Date) {
@@ -129,14 +141,21 @@ class AlarmsViewModel {
         alarm.date = correctedDateUnwrapped
     }
     
-    func updateAlarm(for index: Int, norificationRequestId: String?) {
+    func updateAlarm(for index: Int, notificationRequestId: String?) {
         guard let alarm = alarmsColection.get(at: index) else {
             return
         }
-        alarm.notificationRequestId = norificationRequestId
+        alarm.notificationRequestId = notificationRequestId
     }
     
-    func applyChanges() {
+    func updateAlarm(for index: Int, status: AlarmStatus) {
+        guard let alarm = alarmsColection.get(at: index) else {
+            return
+        }
+        alarm.status = status
+    }
+    
+    func saveChanges() {
         let encodedAlarmsData = try? PropertyListEncoder().encode(alarmsColection)
         if (encodedAlarmsData != nil) {
             userDefaults.set(encodedAlarmsData, forKey: kAlarmsCollection)

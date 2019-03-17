@@ -12,11 +12,12 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    let notifications = Notifications()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        notifications.notificationCenter.delegate = notifications
+        AlarmsStorage.prepareStorage()     
+        Notifications.prepare()
+        
         return true
     }
 
