@@ -26,6 +26,7 @@
 		3DD816642235B8BD00581955 /* ClockHand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD816612235B8BD00581955 /* ClockHand.swift */; };
 		3DD816652235B8BD00581955 /* ClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD816622235B8BD00581955 /* ClockView.swift */; };
 		3DD816662235B8BD00581955 /* ClockFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD816632235B8BD00581955 /* ClockFace.swift */; };
+		58A43B202244042500ED9D85 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A43B1F2244042500ED9D85 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		3DD816612235B8BD00581955 /* ClockHand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClockHand.swift; sourceTree = "<group>"; };
 		3DD816622235B8BD00581955 /* ClockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClockView.swift; sourceTree = "<group>"; };
 		3DD816632235B8BD00581955 /* ClockFace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClockFace.swift; sourceTree = "<group>"; };
+		58A43B1F2244042500ED9D85 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 		3D5A7180221977FA008EEC73 /* OneMoreAlarm */ = {
 			isa = PBXGroup;
 			children = (
+				58A43B1E224403FB00ED9D85 /* Utilities */,
 				3D88BC3D2233E89300A69E4B /* Model */,
 				3D98081522344BD700D1CFDA /* View */,
 				3D464AE0223E984D004420CB /* Controllers */,
@@ -152,6 +155,14 @@
 				3DD816612235B8BD00581955 /* ClockHand.swift */,
 			);
 			path = Clock;
+			sourceTree = "<group>";
+		};
+		58A43B1E224403FB00ED9D85 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				58A43B1F2244042500ED9D85 /* Constants.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,6 +243,7 @@
 				3DD816662235B8BD00581955 /* ClockFace.swift in Sources */,
 				3D464ADF223E93E3004420CB /* Bool+AlarmStatus.swift in Sources */,
 				3D8D668D222C586C0002FE05 /* Notifications.swift in Sources */,
+				58A43B202244042500ED9D85 /* Constants.swift in Sources */,
 				3D56E06E22353F45009DE156 /* PropertiesTableViewModel.swift in Sources */,
 				3D5A7184221977FA008EEC73 /* ViewController.swift in Sources */,
 				3D5A7182221977FA008EEC73 /* AppDelegate.swift in Sources */,

@@ -17,6 +17,16 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let date = Date()
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date)
+
+        if hour > 17 {
+            self.view.backgroundColor = bgNightModeColor
+        } else {
+            self.view.backgroundColor = bgDayModeColor
+        }
         
         // Configure table with alarms
         alarmsTableView.register(AlarmsTableCell.nib, forCellReuseIdentifier: AlarmsTableCell.identifier)
