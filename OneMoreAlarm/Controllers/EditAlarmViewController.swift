@@ -33,10 +33,24 @@ class EditAlarmViewController: UIViewController {
         } else {
             actualAlarmIndex = AlarmsStorage.current.addAlarm()
         }
-        
+        darkModeTheme()
         refreshUI();
     }
-    
+
+    func darkModeTheme() {
+        if currentHour > nightModeTime {
+            self.view.backgroundColor = bgNightModeColor
+            propertiesTableView.backgroundColor = bgNightModeColor
+            timePicker.setValue(nightFontColor, forKeyPath: "textColor")
+            timePicker.setValue(false, forKeyPath: "highlightsToday")
+            print("test time picker")
+        } else {
+            self.view.backgroundColor = bgDayModeColor
+            propertiesTableView.backgroundColor = bgDayModeColor
+
+        }
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         AlarmsStorage.current.discardChanges() // discard all unsaved changes
     }
@@ -104,6 +118,7 @@ extension EditAlarmViewController: UITableViewDataSource, UITableViewDelegate {
     
     // Display properties in table
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
         return propertiesTableViewModel.prepareCell(for: indexPath, alarmId: actualAlarmIndex)
     }
     

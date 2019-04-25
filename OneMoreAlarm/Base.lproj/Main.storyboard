@@ -67,6 +67,7 @@
                     <connections>
                         <outlet property="alarmsTableView" destination="qxX-TD-ypG" id="jgu-Cx-cbH"/>
                         <outlet property="clockView" destination="y85-i5-jxs" id="5NV-Or-suM"/>
+                        <outlet property="dayShiftPic" destination="9Pa-3a-DdN" id="j2v-FI-MNB"/>
                         <segue destination="apg-Vv-MeR" kind="show" identifier="goToAlarmDetailsView" id="vhC-S9-4A9"/>
                     </connections>
                 </viewController>
@@ -90,6 +91,9 @@
                                 <date key="date" timeIntervalSinceReferenceDate="573859130.35522497">
                                     <!--2019-03-09 21:18:50 +0000-->
                                 </date>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="keyPath" value="textColor"/>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="saveSelectedTime" destination="apg-Vv-MeR" eventType="valueChanged" id="EpC-RA-v7b"/>
                                 </connections>
