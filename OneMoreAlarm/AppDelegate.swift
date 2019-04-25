@@ -14,11 +14,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-        AlarmsStorage.prepareStorage()     
+        darkModeTheme()
+        AlarmsStorage.prepareStorage()
         Notifications.prepare()
         
         return true
+    }
+
+    func darkModeTheme() {
+        if currentHour > nightModeTime {
+            UINavigationBar.appearance().barTintColor = bgNightModeColor
+            UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: nightFontColor]
+            UINavigationBar.appearance().tintColor = nightFontColor
+            UINavigationBar.appearance().isTranslucent = false
+
+        } else {
+            UINavigationBar.appearance().barTintColor = bgDayModeColor
+            UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: dayFontColor]
+            UINavigationBar.appearance().tintColor = dayFontColor
+            UINavigationBar.appearance().isTranslucent = false
+            // hides line in navigation bar panel
+            UINavigationBar.appearance().setBackgroundImage(
+                UIImage(),
+                for: .any,
+                barMetrics: .default)
+            UINavigationBar.appearance().shadowImage = UIImage()
+
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

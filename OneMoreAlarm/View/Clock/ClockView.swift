@@ -12,22 +12,21 @@ open class ClockView: UIView {
 
     private let translateToRadian = Double.pi/180.0
 
-    open var hourHandColor: UIColor = #colorLiteral(red: 0.3176470588, green: 0.3098039216, blue: 0.4, alpha: 1)
+    open var hourHandColor: UIColor = dayHourHandColor
     open var hourHandLength: CGFloat = 0.6
     open var hourHandWidth: CGFloat = 0.05
 
     open var minuteHandLength: CGFloat = 0.7
     open var minuteHandWidth: CGFloat = 0.02
-    open var minuteHandColor: UIColor = #colorLiteral(red: 0.3176470588, green: 0.3098039216, blue: 0.4, alpha: 1)
+    open var minuteHandColor: UIColor = dayMinuteHandColor
 
     open var secondHandLength: CGFloat = 0.8
     open var secondHandWidth: CGFloat = 0.01
-    open var secondHandColor: UIColor = #colorLiteral(red: 0.1882352941, green: 0.137254902, blue: 0.6823529412, alpha: 1)
+    open var secondHandColor: UIColor = daySecondHandColor
     open var secondHandCircleDiameter: CGFloat = 4.0
 
     open var handTailLength: CGFloat = 0.2
     private var lineWidthFactor: CGFloat = 100.0
-    //MARK: - Investigate this
     private var diameter: CGFloat { return min(bounds.width, bounds.height)}
     private var lineWidth: CGFloat { return diameter / lineWidthFactor}
 
@@ -50,14 +49,30 @@ open class ClockView: UIView {
     private var secondHand = ClockHand()
     private var secondHandCircle = UIImageView()
 
+    // MARK: - Dark mode theme function
+
+    func darkModeTheme() {
+        if currentHour > nightModeTime {
+            hourHandColor = nightHourHandColor
+            minuteHandColor = nightMinuteHandColor
+            secondHandColor = nightSecondHandColor
+        } else {
+            hourHandColor = dayHourHandColor
+            minuteHandColor = dayMinuteHandColor
+            secondHandColor = daySecondHandColor
+        }
+    }
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
+        darkModeTheme()
         setup()
     }
 
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        darkModeTheme()
         setup()
     }
 
@@ -65,6 +80,7 @@ open class ClockView: UIView {
     private func setup() {
         backgroundColor = UIColor.clear
         translatesAutoresizingMaskIntoConstraints = false
+        darkModeTheme()
         setupHands()
         setupClockFace()
     }

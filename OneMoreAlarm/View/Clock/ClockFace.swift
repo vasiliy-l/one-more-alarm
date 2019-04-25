@@ -23,17 +23,28 @@ class ClockFace: UIImageView {
     var digitFontName = "Avenir-Medium"
     var digitFontCoefficient = CGFloat(9.0)
     var digitFont: UIFont { return UIFont(name: digitFontName, size: diameter/digitFontCoefficient)! }
-    var digitColor = #colorLiteral(red: 0.1882352941, green: 0.137254902, blue: 0.6823529412, alpha: 1)
+    var digitColor = dayDigitColor
 
+    // MARK: - Dark mode theme function 
+    func darkModeTheme() {
+        if currentHour > nightModeTime {
+            digitColor = nightDigitColor
+            
+        } else {
+            digitColor = dayDigitColor
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        darkModeTheme()
         setup()
     }
 
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        darkModeTheme()
         setup()
     }
 
@@ -41,6 +52,7 @@ class ClockFace: UIImageView {
     convenience init(frame: CGRect, staticClockFaceImage: UIImage?) {
         self.init(frame: frame)
         self.staticClockFaceImage = staticClockFaceImage
+        darkModeTheme()
         setup()
     }
 

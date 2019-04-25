@@ -13,21 +13,17 @@ class ViewController: UIViewController {
     @IBOutlet var alarmsTableView: UITableView!
     @IBOutlet var clockView: ClockView!
     
+    @IBOutlet weak var dayShiftPic: UIImageView!
     var selectedAlarmIndex: Int?
-    
+
+    var digitClockFace: ClockFace?
+
+
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let date = Date()
-        let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: date)
-
-        if hour > 17 {
-            self.view.backgroundColor = bgNightModeColor
-        } else {
-            self.view.backgroundColor = bgDayModeColor
-        }
-        
         // Configure table with alarms
         alarmsTableView.register(AlarmsTableCell.nib, forCellReuseIdentifier: AlarmsTableCell.identifier)
         alarmsTableView.dataSource = self
@@ -36,15 +32,34 @@ class ViewController: UIViewController {
         // Enable analog clock
         clockView.displayRealTime = true
         clockView.startClock()
+        darkModeTheme()
+
+    }
+    // MARK: - Dark mode theme function
+    func darkModeTheme() {
+
+        if currentHour > nightModeTime {
+            self.view.backgroundColor = bgNightModeColor
+            dayShiftPic.image = UIImage(named: "night pic")
+            alarmsTableView.backgroundColor = bgNightModeColor
+
+        } else {
+            self.view.backgroundColor = bgDayModeColor
+            dayShiftPic.image = UIImage(named: "day pic")
+            alarmsTableView.backgroundColor = bgDayModeColor
+            
+        }
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
         updateAlarmsData()
-        refreshUI();
+        refreshUI()
+        //darkModeTheme()
     }
     
     func refreshUI() {
-        alarmsTableView.reloadData();
+        alarmsTableView.reloadData()
     }
     
     func updateAlarmsData() {
