@@ -13,13 +13,20 @@ class ViewController: UIViewController {
     @IBOutlet var alarmsTableView: UITableView!
     @IBOutlet var clockView: ClockView!
     
-    var selectedAlarmIndex: Int?
+    static let refreshUINotificationName = Notification.Name("refreshUIOnMainScreen")
+    
+    var selectedAlarmId: UUID?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // add observer for IU synchronization
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshUI(notification:)),
+                                               name: ViewController.refreshUINotificationName,
+                                               object: nil)
+        
         // Configure table with alarms
-        alarmsTableView.register(AlarmsTableCell.nib, forCellReuseIdentifier: AlarmsTableCell.identifier)
+        registerNibs()
         alarmsTableView.dataSource = self
         alarmsTableView.delegate = self
         
@@ -29,60 +36,21 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        updateAlarmsData()
-        refreshUI();
+        Notifications.current.updateAlarmStatuses {
+            NotificationCenter.default.post(name: ViewController.refreshUINotificationName,
+                                            object: nil)
+        }
     }
     
-    func refreshUI() {
-        alarmsTableView.reloadData();
-    }
-    
-    func updateAlarmsData() {
-        Notifications.current.processScheduledNotifications { (scheduledIdentifiers) in
-            // update completed/incompleted notifications
-            let existingAlarms = AlarmsStorage.current.alarmIndexes
-            
-            existingAlarms.forEach({ alarmId in
-                var newStatus = AlarmStatus.Off
-                
-                if let notificationId = AlarmsStorage.current.getNotificationRequestId(for: alarmId) {
-                    if scheduledIdentifiers.contains(notificationId) {
-                        newStatus = .On
-                    }
-                }
-                
-                AlarmsStorage.current.updateAlarm(for: alarmId, status: newStatus)
-            })
-            AlarmsStorage.current.saveChanges()
-            
-            // then, update unresponsed notifications
-            Notifications.current.processUnrespondedNotifications(task: { (unrespondedIdentifiers) in
-                let existingAlarms = AlarmsStorage.current.alarmIndexes
-                
-                existingAlarms.forEach({ alarmId in
-                    var newStatus: AlarmStatus?
-                    
-                    if let notificationId = AlarmsStorage.current.getNotificationRequestId(for: alarmId) {
-                        if unrespondedIdentifiers.contains(notificationId) {
-                            newStatus = .Skipped
-                        }
-                    }
-                    
-                    if let newStatus = newStatus {
-                        AlarmsStorage.current.updateAlarm(for: alarmId, status: newStatus)
-                    }
-                })
-                
-                AlarmsStorage.current.saveChanges()
-            })
+    @objc func refreshUI(notification: Notification) {
+        DispatchQueue.main.async { [unowned self] in
+            self.alarmsTableView.reloadData();
         }
     }
     
     @IBAction func addAlarmButtonPressed(_ sender: UIButton) {
-        selectedAlarmIndex = nil
-        
+        selectedAlarmId = nil
         performSegue(withIdentifier: "goToAlarmDetailsView", sender: self)
-        //let _ = appDelegate.notifications.scheduleNotification(withText: "Simple notification text", timeInterval: 5)
     }
     
     
@@ -90,15 +58,21 @@ class ViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destVC = segue.destination as? EditAlarmViewController {
-            destVC.selectedAlarmIndexToEdit = selectedAlarmIndex
+            destVC.currentAlarmId = selectedAlarmId
         }
     }
 }
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
+    private func registerNibs() {
+        alarmsTableView.register(AlarmsTableCell.nib,
+                                 forCellReuseIdentifier: AlarmsTableCell.identifier)
+        
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return AlarmsStorage.current.getAlarmsAmount()
+        return AlarmStorage.current.items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -106,13 +80,13 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AlarmsTableCell.identifier, for: indexPath) as? AlarmsTableCell else {
             return UITableViewCell()
         }
-        cell.alarmId = indexPath.row
+        cell.alarmId = AlarmStorage.current.items.find(by: indexPath)?.uuid
         
         return cell;
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedAlarmIndex = indexPath.row
+        selectedAlarmId = AlarmStorage.current.items.find(by: indexPath)?.uuid
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -122,20 +96,21 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let removeAction = UITableViewRowAction(style: .destructive, title: "Remove") { (_, indexPath) in
             // remove notification
-            if let notificationRequestId = AlarmsStorage.current.getNotificationRequestId(for: indexPath.row) {
-                Notifications.current.unscheduleNotification(withRequestId: notificationRequestId)
-            }
-            // and save changes
-            AlarmsStorage.current.removeAlarm(at: indexPath.row)
-            AlarmsStorage.current.saveChanges()
+            let alarmId = AlarmStorage.current.items.find(by: indexPath)?.uuid
+            Notifications.current.unscheduleNotification(for: alarmId)
+            AlarmStorage.current.items.remove(by: indexPath)
+            
+            // save changes
+            AlarmStorage.current.saveData()
             
             // animate changes
             tableView.beginUpdates()
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
         }
+        
         let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (_, indexPath) in
-            self.selectedAlarmIndex = indexPath.row
+            self.selectedAlarmId  = AlarmStorage.current.items.find(by: indexPath)?.uuid
             self.performSegue(withIdentifier: "goToAlarmDetailsView", sender: self)
         }
         

@@ -10,9 +10,7 @@ import Foundation
 import UserNotifications
 
 class Notifications: NSObject {
-    private(set) static var current: Notifications!
-    
-    var notificationCenter = UNUserNotificationCenter.current()
+    private var notificationCenter = UNUserNotificationCenter.current()
     
     struct Action {
         static let open = "OPEN_ACTION"
@@ -24,8 +22,18 @@ class Notifications: NSObject {
         static let alarm = "ALARM_NOTIFICATION"
     }
     
-    static func prepare() {
-        Notifications.current = Notifications()
+    private static var instance: Notifications?
+    static var current: Notifications {
+        get {
+            if instance == nil {
+                instance = Notifications()
+            }
+            return instance!
+        }
+    }
+    
+    private override init() {
+        super.init()
         
         let openAction = UNNotificationAction(identifier: Action.open, title: "Open App", options: [.foreground])
         let confirmAction = UNNotificationAction(identifier: Action.confirm, title: "Confirm", options: [.destructive])
@@ -33,9 +41,9 @@ class Notifications: NSObject {
         let actions = [openAction, confirmAction, snoozeAction]
         
         let notificationCategory = UNNotificationCategory(identifier: Category.alarm, actions: actions, intentIdentifiers: [], hiddenPreviewsBodyPlaceholder: "%u alarms", options: .customDismissAction)
-        Notifications.current.notificationCenter.setNotificationCategories([notificationCategory])
+        notificationCenter.setNotificationCategories([notificationCategory])
         
-        Notifications.current.notificationCenter.delegate = Notifications.current
+        notificationCenter.delegate = self
     }
 
     func requestPermissions() {
@@ -46,79 +54,94 @@ class Notifications: NSObject {
             
             notificationCenter.requestAuthorization(options: [.alert, .sound]) {
                 (granted, error) in
-                if granted {
+                if !granted {
                     print("Application is not authorized to send notififcations")
                 }
             }
         }
     }
     
-    func scheduleNotification(withText: String, date: Date) -> String {
-        requestPermissions()
+    func scheduleNotification(for alarmId: UUID?) -> UUID? {
+        // check whether alarm is present in storage
+        guard let alarm = AlarmStorage.current.items.find(by: alarmId) else {
+            return nil
+        }
+
+        // remove old alarm notification, if any
+        unscheduleNotification(for: alarm.uuid)
         
+        // check whether we can define notification properties using given alarm object
+        guard let alarmName = alarm.name, let alarmDate = alarm.date else {
+            return nil
+        }
+        
+        // construct new notification request
         let content = UNMutableNotificationContent()
-        content.body = withText
+        content.body = alarmName
         content.sound = UNNotificationSound.default
         content.categoryIdentifier = Category.alarm
         
-        var notificationDate = DateComponents()
-        notificationDate.hour = Calendar.current.component(.hour, from: date)
-        notificationDate.minute = Calendar.current.component(.minute, from: date)
-        
+        let notificationDate = Calendar.current.dateComponents(
+            [.year, .month, .day, .hour, .minute],
+            from: alarmDate)
         let trigger = UNCalendarNotificationTrigger(dateMatching: notificationDate, repeats: false)
         
-        let requestId = UUID().uuidString
-        let request = UNNotificationRequest(identifier: requestId, content: content, trigger: trigger)
+        let notificationReqId = UUID()
+        let request = UNNotificationRequest(identifier: notificationReqId.uuidString,
+                                            content: content, trigger: trigger)
         
-        notificationCenter.add(request) { error in
-            if error != nil {
-                print("Unable to schedule notification. \(error!.localizedDescription)")
-            }
-        }
-        
-        return requestId
-    }
-    
-    func scheduleNotification(withText: String, timeInterval: TimeInterval) -> String? {
+        // try to schedule the notification
         requestPermissions()
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Alarm notification"
-        content.body = withText
-        content.sound = UNNotificationSound.default
-        content.categoryIdentifier = Category.alarm
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
-        
-        let requestId = UUID().uuidString
-        let request = UNNotificationRequest(identifier: requestId, content: content, trigger: trigger)
-        
         notificationCenter.add(request) { error in
-            if error != nil {
-                print("Unable to schedule notification. \(error!.localizedDescription)")
+            guard let error = error else {
+                return
             }
+            
+            print("Unable to schedule notification. \(error.localizedDescription)")
         }
         
-        return requestId
+        // return ID of the created notification
+        return notificationReqId
     }
     
-    func unscheduleNotification(withRequestId: String) {
-        notificationCenter.removePendingNotificationRequests(withIdentifiers: [withRequestId])
+    func unscheduleNotification(for alarmId: UUID?) {
+        // return if no such alarm in storage
+        guard let alarm = AlarmStorage.current.items.find(by: alarmId) else {
+            return
+        }
+        
+        // remove all associated notifications
+        switch alarm.status {
+        case .enabled(let notificationReqId) where notificationReqId != nil:
+            let reqIdString = notificationReqId!.uuidString
+            notificationCenter.removePendingNotificationRequests(withIdentifiers: [reqIdString])
+            //notificationCenter.removeDeliveredNotifications(withIdentifiers: [reqIdString])
+        default:
+            break
+        }
     }
     
-    func processUnrespondedNotifications(task: @escaping (_ notificationRequestIDs: [String]) -> ()) {
+    func updateAlarmStatuses(completion: @escaping () -> Void) {
         notificationCenter.getDeliveredNotifications { notifications in
-            let identifiers = notifications.map({ $0.request.identifier })
-            task(identifiers)
+            // process all delivered notifications
+            notifications.forEach { notification in
+                // find alarm object for delivered notificaiton
+                guard let alarm = AlarmStorage.current.items
+                    .find(byNotificationId: notification.request.identifier) else {
+                    return
+                }
+                
+                alarm.status = .enabled(nil)
+            }
+            
+            // save updated changes
+            AlarmStorage.current.saveData()
+            
+            // trigger completion handler
+            completion()
         }
     }
     
-    func processScheduledNotifications(task: @escaping (_ notificationRequestIDs: [String]) -> ()) {
-        notificationCenter.getPendingNotificationRequests { notifications in
-            let identifiers = notifications.map({ $0.identifier })
-            task(identifiers)
-        }
-    }
 }
 
 extension Notifications: UNUserNotificationCenterDelegate {
@@ -142,7 +165,6 @@ extension Notifications: UNUserNotificationCenterDelegate {
             print("'Confirm' notification action selected")
         case Action.snooze:
             print("'Snooze' notification action selected")
-            let _ = scheduleNotification(withText: "Znoozed notification", timeInterval: 5)
             
         default:
             print("Unknown notification action selected")

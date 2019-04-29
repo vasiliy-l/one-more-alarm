@@ -14,71 +14,54 @@ class AlarmsTableCell: UITableViewCell {
     @IBOutlet var timeLabel: UILabel!
     @IBOutlet var statusSwitch: UISwitch!
     
-    private var currentAlarmId: Int?
-    
-    var alarmId: Int? {
+    private var alarmUUID: UUID?
+    var alarmId: UUID?
+    {
         get {
-            return currentAlarmId
+            return alarmUUID
         }
         set {
-            currentAlarmId = newValue
+            alarmUUID = newValue
             
-            guard let currentAlarmId = currentAlarmId else {
+            // find required alarm object in storage by provided ID
+            guard let foundAlarm = AlarmStorage.current.items.find(by: newValue) else {
                 return
             }
             
-            let name = AlarmsStorage.current.getName(for: currentAlarmId)
-            let timeStr = AlarmsStorage.current.getDateString(for: currentAlarmId)
-            let status = AlarmsStorage.current.getStatus(for: currentAlarmId)
-            
-            nameLabel.text = name
-            timeLabel.text = timeStr
-            if let status = status {
-                updateStausSwitch(with: status)
-            }
-        }
-    }
-    
-    func updateStausSwitch(with status: AlarmStatus) {
-        statusSwitch.onTintColor = status.SwitchColor
-        switch status {
-        case .Off:
-            statusSwitch.isOn = false
-        default:
-            statusSwitch.isOn = true
+            // update UI
+            nameLabel.text = foundAlarm.name
+            timeLabel.text = foundAlarm.date?.toString()
+            statusSwitch.onTintColor = foundAlarm.status.asSwitchColor()
+            statusSwitch.isOn = foundAlarm.status.asBool()
         }
     }
     
     @IBAction func statusSwitchValueChanged(_ sender: UISwitch) {
-        // update UI
-        if sender.isOn && sender.onTintColor != AlarmStatus.On.SwitchColor {
-            sender.onTintColor = AlarmStatus.On.SwitchColor
-        }
-        
-        guard let currentAlarmId = currentAlarmId else {
-            return
-        }
-        
-        // update alarm notification
-        var newNotification: String?
-        if let oldNotification = AlarmsStorage.current.getNotificationRequestId(for: currentAlarmId) {
-            Notifications.current.unscheduleNotification(withRequestId: oldNotification)
-        }
-        if sender.isOn {
-            if let oldDate = AlarmsStorage.current.getDate(for: currentAlarmId) {
-                AlarmsStorage.current.updateAlarm(for: currentAlarmId, date: oldDate)
+        // update notifications
+        switch sender.isOn {
+        case true:
+            // correct alarm date to send notification in future
+            if let alarmDate = AlarmStorage.current.items.find(by: alarmId)?.date {
+                let updatedAlarmDate = alarmDate.correctTimeToFuture()
+                AlarmStorage.current.items.find(by: alarmId)?.date = updatedAlarmDate
             }
-            
-            if let date = AlarmsStorage.current.getDate(for: currentAlarmId) {
-                let text = AlarmsStorage.current.getName(for: currentAlarmId)
-                newNotification = Notifications.current.scheduleNotification(withText: text, date: date)
-            }
+            // register new notification
+            let notificationReqId = Notifications.current.scheduleNotification(for: alarmId)
+            AlarmStorage.current.items.find(by: alarmId)?.status = .enabled(notificationReqId)
+        case false:
+            Notifications.current.unscheduleNotification(for: alarmId)
+            AlarmStorage.current.items.find(by: alarmId)?.status = .disabled
         }
         
-        // update stored settings
-        AlarmsStorage.current.updateAlarm(for: currentAlarmId, status: sender.isOn.asAlarmStatus)
-        AlarmsStorage.current.updateAlarm(for: currentAlarmId, notificationRequestId: newNotification)
-        AlarmsStorage.current.saveChanges()
+        // save updated alarms data
+        AlarmStorage.current.saveData()
+        
+        // update UI: switch appearance
+        if let alarmStatus = AlarmStorage.current.items.find(by: alarmId)?.status {
+            if sender.onTintColor != alarmStatus.asSwitchColor() {
+                sender.onTintColor = alarmStatus.asSwitchColor()
+            }
+        }
     }
     
     override func awakeFromNib() {
@@ -89,13 +72,13 @@ class AlarmsTableCell: UITableViewCell {
     override func prepareForReuse() {
         nameLabel.text = nil
         timeLabel.text = nil
-        updateStausSwitch(with: .Off)
+        statusSwitch.isOn = false
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
+        // Configure the view for selected state
     }
     
     static var nib:UINib {
@@ -105,4 +88,5 @@ class AlarmsTableCell: UITableViewCell {
     static var identifier: String {
         return String(describing: self)
     }
+    
 }

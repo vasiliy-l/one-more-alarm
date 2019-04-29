@@ -12,8 +12,7 @@ class EditAlarmViewController: UIViewController {
     
     var propertiesTableViewModel: PropertiesTableViewModel!
     
-    var selectedAlarmIndexToEdit: Int?
-    private var actualAlarmIndex: Int!
+    var currentAlarmId: UUID?
     
     @IBOutlet var timePicker: UIDatePicker!
     @IBOutlet var propertiesTableView: UITableView!
@@ -27,39 +26,38 @@ class EditAlarmViewController: UIViewController {
         propertiesTableView.dataSource = self
         propertiesTableView.delegate = self
         
-        // determine whether to work with selected alarm from previous screen or edit new alarm
-        if let alarmIndex = selectedAlarmIndexToEdit {
-            actualAlarmIndex = alarmIndex
-        } else {
-            actualAlarmIndex = AlarmsStorage.current.addAlarm()
+        // create new alarm if required
+        if currentAlarmId == nil {
+            let newAlarm = Alarm()
+            currentAlarmId = newAlarm.uuid
+            AlarmStorage.current.items.append(newAlarm)
         }
         
         refreshUI();
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        AlarmsStorage.current.discardChanges() // discard all unsaved changes
+        AlarmStorage.current.loadData() // discard all unsaved changes
     }
     
     @IBAction func saveButtonPressed(_ sender: Any) {
         // save time explicitly, if the User did not interact with the time control
         saveSelectedTime()
         
-        // remove old notification for current alarm, if any
-        if let oldNatification = AlarmsStorage.current.getNotificationRequestId(for: actualAlarmIndex) {
-            Notifications.current.unscheduleNotification(withRequestId: oldNatification)
+        // correct alarm date to send notification in future
+        if let alarmDate = AlarmStorage.current.items.find(by: currentAlarmId)?.date {
+            let updatedAlarmDate = alarmDate.correctTimeToFuture()
+            AlarmStorage.current.items.find(by: currentAlarmId)?.date = updatedAlarmDate
         }
+        // register new notification
+        let notificationReqId = Notifications.current.scheduleNotification(for: currentAlarmId)
+        AlarmStorage.current.items.find(by: currentAlarmId)?.status = .enabled(notificationReqId)
         
-        // schedule new notification for current alarm
-        let alarmName = AlarmsStorage.current.getName(for: actualAlarmIndex)
-        if let alarmDate = AlarmsStorage.current.getDate(for: actualAlarmIndex) {
-            let requestId = Notifications.current.scheduleNotification(withText: alarmName, date: alarmDate)
-            AlarmsStorage.current.updateAlarm(for: actualAlarmIndex, notificationRequestId: requestId)
-            AlarmsStorage.current.updateAlarm(for: actualAlarmIndex, status: .On)
-        }
+         // save changes and send notification about changes
+        AlarmStorage.current.saveData()
+        //NotificationCenter.default.post(name: ViewController.refreshUINotificationName, object: nil)
         
-        AlarmsStorage.current.saveChanges() // store all changes
-        
+        // return to previous screen
         navigationController?.popToRootViewController(animated: true)
     }
     
@@ -67,7 +65,8 @@ class EditAlarmViewController: UIViewController {
      Updates time value of current alarm during interaction with time picker
      */
     @IBAction func saveSelectedTime() {
-        AlarmsStorage.current.updateAlarm(for: actualAlarmIndex, date: timePicker.date)
+        let date = timePicker.date.correctTimeToFuture()
+        AlarmStorage.current.items.find(by: currentAlarmId)?.date = date
     }
     
     /**
@@ -78,21 +77,11 @@ class EditAlarmViewController: UIViewController {
           timePicker.minuteInterval = 1
         #endif
         
-        propertiesTableView.reloadData();
-        
-        if let alarmDate = AlarmsStorage.current.getDate(for: actualAlarmIndex) {
-            let calendar = Calendar.current
-            let hour = calendar.component(.hour, from: alarmDate)
-            let minute = calendar.component(.minute, from: alarmDate)
-            
-            // always set current day for time picker
-            let timePickerDate = Calendar.current.date(
-                bySettingHour: hour, minute: minute, second: 0,
-                of: Date())
-            if let timePickerDateUnwrapped = timePickerDate {
-                timePicker.setDate(timePickerDateUnwrapped, animated: false)
-            }
+        if let alarmDate = AlarmStorage.current.items.find(by: currentAlarmId)?.date {
+            timePicker.setDate(alarmDate.correctTimeToToday(), animated: false)
         }
+        
+        propertiesTableView.reloadData();
     }
 }
 
@@ -104,12 +93,12 @@ extension EditAlarmViewController: UITableViewDataSource, UITableViewDelegate {
     
     // Display properties in table
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return propertiesTableViewModel.prepareCell(for: indexPath, alarmId: actualAlarmIndex)
+        return propertiesTableViewModel.prepareCell(for: indexPath, alarmId: currentAlarmId)
     }
     
     // Interact with user to update property value on selection from table
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        propertiesTableViewModel.performAction(for: indexPath, on: self, alarmId: actualAlarmIndex)
+        propertiesTableViewModel.performAction(for: indexPath, on: self, alarmId: currentAlarmId)
     }
     
 }

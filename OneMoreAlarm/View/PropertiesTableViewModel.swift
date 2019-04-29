@@ -15,10 +15,10 @@ class PropertiesTableViewModel {
     
     init(for table: UITableView) {
         tableView = table
-        registedNibs()
+        registerNibs()
     }
     
-    private func registedNibs() {
+    private func registerNibs() {
         tableView.register(TextEditTableCell.nib, forCellReuseIdentifier: TextEditTableCell.identifier)
     }
     
@@ -26,7 +26,7 @@ class PropertiesTableViewModel {
      Returns amount of existing properties
      */
     var propertiesCount: Int {
-        return AlarmProperty.count()
+        return AlarmProperty.propertyNames.capacity
     }
     
     /**
@@ -36,7 +36,7 @@ class PropertiesTableViewModel {
          - indexPath: current index path of the table
          - alarmId: ID of the alarm which poperties should be used
      */
-    func prepareCell(for indexPath: IndexPath, alarmId: Int) -> UITableViewCell {
+    func prepareCell(for indexPath: IndexPath, alarmId: UUID?) -> UITableViewCell {
         guard let property = AlarmProperty.init(rawValue: indexPath.row) else {
             return UITableViewCell()
         }
@@ -48,7 +48,7 @@ class PropertiesTableViewModel {
             }
             
             cell.nameLabel.text = property.propertyName()
-            cell.valueLabel.text = AlarmsStorage.current.getName(for: alarmId)
+             cell.valueLabel.text = AlarmStorage.current.items.find(by: alarmId)?.name
             
             return cell
         }
@@ -62,7 +62,7 @@ class PropertiesTableViewModel {
          - currentVC: current ViewController object where properties table is placed
          - alarmId: ID of the alarm which poperties should be used
      */
-    func performAction(for indexPath: IndexPath, on currentVC: UIViewController, alarmId: Int) {
+    func performAction(for indexPath: IndexPath, on currentVC: UIViewController, alarmId: UUID?) {
         
         guard let property = AlarmProperty.init(rawValue: indexPath.row) else {
             return
@@ -76,7 +76,7 @@ class PropertiesTableViewModel {
                 preferredStyle: .alert)
             
             editNameAlert.addTextField { (textField) in
-                let currentAlarmName = AlarmsStorage.current.getName(for: alarmId)
+                let currentAlarmName = AlarmStorage.current.items.find(by: alarmId)?.name
                 textField.text = currentAlarmName
             }
             
@@ -84,7 +84,7 @@ class PropertiesTableViewModel {
                 if let textField = editNameAlert.textFields?[0],
                     let newAlarmName = textField.text,
                     newAlarmName.count > 0 { // update name only if not empty
-                    AlarmsStorage.current.updateAlarm(for: alarmId, name: newAlarmName)
+                        AlarmStorage.current.items.find(by: alarmId)?.name = newAlarmName
                 }
                 
                 self.tableView.reloadData()
@@ -98,10 +98,6 @@ class PropertiesTableViewModel {
 
 enum AlarmProperty: Int {
     case Name
-    
-    static var count = {
-        return 1
-    }
     
     static let propertyNames = [
         Name: "Name",
