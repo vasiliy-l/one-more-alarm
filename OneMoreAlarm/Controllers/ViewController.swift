@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     
     static let refreshUINotificationName = Notification.Name("refreshUIOnMainScreen")
     
-    var selectedAlarmId: UUID?
+    var selectedAlarmId: AlarmID?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,13 +82,13 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AlarmsTableCell.identifier, for: indexPath) as? AlarmsTableCell else {
             return UITableViewCell()
         }
-        cell.alarmId = AlarmStorage.current.items.find(by: indexPath)?.uuid
+        cell.alarmId = AlarmStorage.current.items.find(by: indexPath)?.alarmId
         
         return cell;
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedAlarmId = AlarmStorage.current.items.find(by: indexPath)?.uuid
+        selectedAlarmId = AlarmStorage.current.items.find(by: indexPath)?.alarmId
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -98,7 +98,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let removeAction = UITableViewRowAction(style: .destructive, title: "Remove") { (_, indexPath) in
             // remove notification
-            let alarmId = AlarmStorage.current.items.find(by: indexPath)?.uuid
+            let alarmId = AlarmStorage.current.items.find(by: indexPath)?.alarmId
             Notifications.current.unscheduleNotification(for: alarmId)
             AlarmStorage.current.items.remove(by: indexPath)
             
@@ -112,7 +112,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (_, indexPath) in
-            self.selectedAlarmId  = AlarmStorage.current.items.find(by: indexPath)?.uuid
+            self.selectedAlarmId  = AlarmStorage.current.items.find(by: indexPath)?.alarmId
             self.performSegue(withIdentifier: "goToAlarmDetailsView", sender: self)
         }
         

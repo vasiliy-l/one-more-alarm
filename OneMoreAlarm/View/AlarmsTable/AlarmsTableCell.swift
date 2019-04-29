@@ -14,14 +14,14 @@ class AlarmsTableCell: UITableViewCell {
     @IBOutlet var timeLabel: UILabel!
     @IBOutlet var statusSwitch: UISwitch!
     
-    private var alarmUUID: UUID?
-    var alarmId: UUID?
+    private var _alarmId: AlarmID?
+    var alarmId: AlarmID?
     {
         get {
-            return alarmUUID
+            return _alarmId
         }
         set {
-            alarmUUID = newValue
+            _alarmId = newValue
             
             // find required alarm object in storage by provided ID
             guard let foundAlarm = AlarmStorage.current.items.find(by: newValue) else {

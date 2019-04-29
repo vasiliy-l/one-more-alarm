@@ -62,11 +62,11 @@ class AlarmsCollection2: Codable {
 }
 
 extension Array where Element:Alarm {
-    func find(by uuid: UUID?) -> Alarm? {
-        guard let uuid = uuid else {
+    func find(by alarmId: AlarmID?) -> Alarm? {
+        guard let alarmId = alarmId else {
             return nil
         }
-        return first(where: {$0.uuid == uuid})
+        return first(where: {$0.alarmId == alarmId})
     }
     
     func find(by indexPath: IndexPath) -> Alarm? {
@@ -103,7 +103,7 @@ extension Array where Element:Alarm {
             switch alarm.status {
             case .enabled(let notificationReqId) where notificationReqId != nil:
                 if let alarmDate = alarm.date, alarmDate < Date() {
-                    Notifications.current.unscheduleNotification(for: alarm.uuid)
+                    Notifications.current.unscheduleNotification(for: alarm.alarmId)
                     alarm.status = .disabled
                 }
             default:

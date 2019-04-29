@@ -61,14 +61,14 @@ class Notifications: NSObject {
         }
     }
     
-    func scheduleNotification(for alarmId: UUID?) -> UUID? {
+    func scheduleNotification(for alarmId: AlarmID?) -> NotificationRequestID? {
         // check whether alarm is present in storage
         guard let alarm = AlarmStorage.current.items.find(by: alarmId) else {
             return nil
         }
 
         // remove old alarm notification, if any
-        unscheduleNotification(for: alarm.uuid)
+        unscheduleNotification(for: alarm.alarmId)
         
         // check whether we can define notification properties using given alarm object
         guard let alarmName = alarm.name, let alarmDate = alarm.date else {
@@ -86,7 +86,7 @@ class Notifications: NSObject {
             from: alarmDate)
         let trigger = UNCalendarNotificationTrigger(dateMatching: notificationDate, repeats: false)
         
-        let notificationReqId = UUID()
+        let notificationReqId = NotificationRequestID()
         let request = UNNotificationRequest(identifier: notificationReqId.uuidString,
                                             content: content, trigger: trigger)
         
@@ -104,7 +104,7 @@ class Notifications: NSObject {
         return notificationReqId
     }
     
-    func unscheduleNotification(for alarmId: UUID?) {
+    func unscheduleNotification(for alarmId: AlarmID?) {
         // return if no such alarm in storage
         guard let alarm = AlarmStorage.current.items.find(by: alarmId) else {
             return

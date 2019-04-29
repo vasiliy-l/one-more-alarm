@@ -9,9 +9,11 @@
 import Foundation
 import UIKit
 
+typealias NotificationRequestID = UUID
+
 enum AlarmStatus {
     case disabled
-    case enabled(UUID?)
+    case enabled(NotificationRequestID?)
 }
 
 extension AlarmStatus: Codable {
@@ -32,7 +34,8 @@ extension AlarmStatus: Codable {
         case 0:
             self = .disabled
         case 1:
-            let notificationRequest = try container.decode(UUID?.self, forKey: .associatedValue)
+            let notificationRequest = try container.decode(NotificationRequestID?.self,
+                                                           forKey: .associatedValue)
             self = .enabled(notificationRequest)
         default:
             throw CodingError.unknownValue

@@ -36,7 +36,7 @@ class PropertiesTableViewModel {
          - indexPath: current index path of the table
          - alarmId: ID of the alarm which poperties should be used
      */
-    func prepareCell(for indexPath: IndexPath, alarmId: UUID?) -> UITableViewCell {
+    func prepareCell(for indexPath: IndexPath, alarmId: AlarmID?) -> UITableViewCell {
         guard let property = AlarmProperty.init(rawValue: indexPath.row) else {
             return UITableViewCell()
         }
@@ -62,7 +62,7 @@ class PropertiesTableViewModel {
          - currentVC: current ViewController object where properties table is placed
          - alarmId: ID of the alarm which poperties should be used
      */
-    func performAction(for indexPath: IndexPath, on currentVC: UIViewController, alarmId: UUID?) {
+    func performAction(for indexPath: IndexPath, on currentVC: UIViewController, alarmId: AlarmID?) {
         
         guard let property = AlarmProperty.init(rawValue: indexPath.row) else {
             return

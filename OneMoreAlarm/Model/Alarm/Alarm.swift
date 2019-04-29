@@ -8,14 +8,16 @@
 
 import Foundation
 
+typealias AlarmID = UUID
+
 class Alarm: Codable {
-    private(set) var uuid: UUID
+    private(set) var alarmId: AlarmID
     var name: String?
     var date: Date?
     var status: AlarmStatus
     
     init() {
-        uuid = UUID()
+        alarmId = AlarmID()
         name = "Alarm"
         status = .disabled
     }

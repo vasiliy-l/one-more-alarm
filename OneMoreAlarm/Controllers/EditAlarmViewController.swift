@@ -12,7 +12,7 @@ class EditAlarmViewController: UIViewController {
     
     var propertiesTableViewModel: PropertiesTableViewModel!
     
-    var currentAlarmId: UUID?
+    var currentAlarmId: AlarmID?
     
     @IBOutlet var timePicker: UIDatePicker!
     @IBOutlet var propertiesTableView: UITableView!
@@ -29,7 +29,7 @@ class EditAlarmViewController: UIViewController {
         // create new alarm if required
         if currentAlarmId == nil {
             let newAlarm = Alarm()
-            currentAlarmId = newAlarm.uuid
+            currentAlarmId = newAlarm.alarmId
             AlarmStorage.current.items.append(newAlarm)
         }
         
