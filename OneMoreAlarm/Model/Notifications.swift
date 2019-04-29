@@ -63,7 +63,7 @@ class Notifications: NSObject {
     
     func scheduleNotification(for alarmId: AlarmID?) -> NotificationRequestID? {
         // check whether alarm is present in storage
-        guard let alarm = AlarmStorage.current.items.find(by: alarmId) else {
+        guard let alarm = AlarmsStorage.current.items.find(by: alarmId) else {
             return nil
         }
 
@@ -106,7 +106,7 @@ class Notifications: NSObject {
     
     func unscheduleNotification(for alarmId: AlarmID?) {
         // return if no such alarm in storage
-        guard let alarm = AlarmStorage.current.items.find(by: alarmId) else {
+        guard let alarm = AlarmsStorage.current.items.find(by: alarmId) else {
             return
         }
         
@@ -126,7 +126,7 @@ class Notifications: NSObject {
             // process all delivered notifications
             notifications.forEach { notification in
                 // find alarm object for delivered notificaiton
-                guard let alarm = AlarmStorage.current.items
+                guard let alarm = AlarmsStorage.current.items
                     .find(byNotificationId: notification.request.identifier) else {
                     return
                 }
@@ -135,7 +135,7 @@ class Notifications: NSObject {
             }
             
             // save updated changes
-            AlarmStorage.current.saveData()
+            AlarmsStorage.current.saveData()
             
             // trigger completion handler
             completion()

@@ -37,8 +37,8 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         Notifications.current.updateAlarmStatusesForDeliveredNotifications {
-            AlarmStorage.current.items.updateStatusesForCompletedAlarms()
-            AlarmStorage.current.saveData()
+            AlarmsStorage.current.items.updateStatusesForCompletedAlarms()
+            AlarmsStorage.current.saveData()
             NotificationCenter.default.post(name: ViewController.refreshUINotificationName,
                                             object: nil)
         }
@@ -74,7 +74,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return AlarmStorage.current.items.count
+        return AlarmsStorage.current.items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -82,13 +82,13 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: AlarmsTableCell.identifier, for: indexPath) as? AlarmsTableCell else {
             return UITableViewCell()
         }
-        cell.alarmId = AlarmStorage.current.items.find(by: indexPath)?.alarmId
+        cell.alarmId = AlarmsStorage.current.items.find(by: indexPath)?.alarmId
         
         return cell;
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedAlarmId = AlarmStorage.current.items.find(by: indexPath)?.alarmId
+        selectedAlarmId = AlarmsStorage.current.items.find(by: indexPath)?.alarmId
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -98,12 +98,12 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let removeAction = UITableViewRowAction(style: .destructive, title: "Remove") { (_, indexPath) in
             // remove notification
-            let alarmId = AlarmStorage.current.items.find(by: indexPath)?.alarmId
+            let alarmId = AlarmsStorage.current.items.find(by: indexPath)?.alarmId
             Notifications.current.unscheduleNotification(for: alarmId)
-            AlarmStorage.current.items.remove(by: indexPath)
+            AlarmsStorage.current.items.remove(by: indexPath)
             
             // save changes
-            AlarmStorage.current.saveData()
+            AlarmsStorage.current.saveData()
             
             // animate changes
             tableView.beginUpdates()
@@ -112,7 +112,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (_, indexPath) in
-            self.selectedAlarmId  = AlarmStorage.current.items.find(by: indexPath)?.alarmId
+            self.selectedAlarmId  = AlarmsStorage.current.items.find(by: indexPath)?.alarmId
             self.performSegue(withIdentifier: "goToAlarmDetailsView", sender: self)
         }
         

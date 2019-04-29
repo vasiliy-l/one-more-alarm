@@ -48,7 +48,7 @@ class PropertiesTableViewModel {
             }
             
             cell.nameLabel.text = property.propertyName()
-             cell.valueLabel.text = AlarmStorage.current.items.find(by: alarmId)?.name
+             cell.valueLabel.text = AlarmsStorage.current.items.find(by: alarmId)?.name
             
             return cell
         }
@@ -76,7 +76,7 @@ class PropertiesTableViewModel {
                 preferredStyle: .alert)
             
             editNameAlert.addTextField { (textField) in
-                let currentAlarmName = AlarmStorage.current.items.find(by: alarmId)?.name
+                let currentAlarmName = AlarmsStorage.current.items.find(by: alarmId)?.name
                 textField.text = currentAlarmName
             }
             
@@ -84,7 +84,7 @@ class PropertiesTableViewModel {
                 if let textField = editNameAlert.textFields?[0],
                     let newAlarmName = textField.text,
                     newAlarmName.count > 0 { // update name only if not empty
-                        AlarmStorage.current.items.find(by: alarmId)?.name = newAlarmName
+                        AlarmsStorage.current.items.find(by: alarmId)?.name = newAlarmName
                 }
                 
                 self.tableView.reloadData()

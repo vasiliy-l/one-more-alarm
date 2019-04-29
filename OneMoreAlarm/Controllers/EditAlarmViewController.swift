@@ -30,14 +30,14 @@ class EditAlarmViewController: UIViewController {
         if currentAlarmId == nil {
             let newAlarm = Alarm()
             currentAlarmId = newAlarm.alarmId
-            AlarmStorage.current.items.append(newAlarm)
+            AlarmsStorage.current.items.append(newAlarm)
         }
         
         refreshUI();
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        AlarmStorage.current.loadData() // discard all unsaved changes
+        AlarmsStorage.current.loadData() // discard all unsaved changes
     }
     
     @IBAction func saveButtonPressed(_ sender: Any) {
@@ -45,16 +45,16 @@ class EditAlarmViewController: UIViewController {
         saveSelectedTime()
         
         // correct alarm date to send notification in future
-        if let alarmDate = AlarmStorage.current.items.find(by: currentAlarmId)?.date {
+        if let alarmDate = AlarmsStorage.current.items.find(by: currentAlarmId)?.date {
             let updatedAlarmDate = alarmDate.correctTimeToFuture()
-            AlarmStorage.current.items.find(by: currentAlarmId)?.date = updatedAlarmDate
+            AlarmsStorage.current.items.find(by: currentAlarmId)?.date = updatedAlarmDate
         }
         // register new notification
         let notificationReqId = Notifications.current.scheduleNotification(for: currentAlarmId)
-        AlarmStorage.current.items.find(by: currentAlarmId)?.status = .enabled(notificationReqId)
+        AlarmsStorage.current.items.find(by: currentAlarmId)?.status = .enabled(notificationReqId)
         
          // save changes and send notification about changes
-        AlarmStorage.current.saveData()
+        AlarmsStorage.current.saveData()
         //NotificationCenter.default.post(name: ViewController.refreshUINotificationName, object: nil)
         
         // return to previous screen
@@ -66,7 +66,7 @@ class EditAlarmViewController: UIViewController {
      */
     @IBAction func saveSelectedTime() {
         let date = timePicker.date.correctTimeToFuture()
-        AlarmStorage.current.items.find(by: currentAlarmId)?.date = date
+        AlarmsStorage.current.items.find(by: currentAlarmId)?.date = date
     }
     
     /**
@@ -77,7 +77,7 @@ class EditAlarmViewController: UIViewController {
           timePicker.minuteInterval = 1
         #endif
         
-        if let alarmDate = AlarmStorage.current.items.find(by: currentAlarmId)?.date {
+        if let alarmDate = AlarmsStorage.current.items.find(by: currentAlarmId)?.date {
             timePicker.setDate(alarmDate.correctTimeToToday(), animated: false)
         }
         

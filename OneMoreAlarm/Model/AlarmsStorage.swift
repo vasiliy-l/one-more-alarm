@@ -1,5 +1,5 @@
 //
-//  AlarmStorage.swift
+//  AlarmsStorage.swift
 //  OneMoreAlarm
 //
 //  Created by  William on 4/21/19.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-fileprivate let kAlarmsCollection = "UserAlarms2"
+fileprivate let kAlarmsCollection = "UserAlarms"
 
-class AlarmStorage {
+class AlarmsStorage {
     private let userDefaults = UserDefaults.standard;
     
     private var alarmsCollection: AlarmsCollection2!
@@ -23,11 +23,11 @@ class AlarmStorage {
         }
     }
     
-    private static var instance: AlarmStorage?
-    static var current: AlarmStorage {
+    private static var instance: AlarmsStorage?
+    static var current: AlarmsStorage {
         get {
             if instance == nil {
-                instance = AlarmStorage()
+                instance = AlarmsStorage()
             }
             return instance!
         }
@@ -42,7 +42,8 @@ class AlarmStorage {
      */
     func loadData() {
         if let storedAlarmsData = userDefaults.data(forKey: kAlarmsCollection),
-            let storedAlarms = try? PropertyListDecoder().decode(AlarmsCollection2.self, from: storedAlarmsData) {
+            let storedAlarms = try? PropertyListDecoder().decode(AlarmsCollection2.self,
+                                                                 from: storedAlarmsData) {
             alarmsCollection = storedAlarms
         } else {
             alarmsCollection = AlarmsCollection2()

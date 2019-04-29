@@ -24,7 +24,7 @@ class AlarmsTableCell: UITableViewCell {
             _alarmId = newValue
             
             // find required alarm object in storage by provided ID
-            guard let foundAlarm = AlarmStorage.current.items.find(by: newValue) else {
+            guard let foundAlarm = AlarmsStorage.current.items.find(by: newValue) else {
                 return
             }
             
@@ -41,30 +41,30 @@ class AlarmsTableCell: UITableViewCell {
         switch sender.isOn {
         case true:
             // correct alarm date to send notification in future
-            if let alarmDate = AlarmStorage.current.items.find(by: alarmId)?.date {
+            if let alarmDate = AlarmsStorage.current.items.find(by: alarmId)?.date {
                 let updatedAlarmDate = alarmDate.correctTimeToFuture()
-                AlarmStorage.current.items.find(by: alarmId)?.date = updatedAlarmDate
+                AlarmsStorage.current.items.find(by: alarmId)?.date = updatedAlarmDate
             }
             
             // register new notification
             let notificationReqId = Notifications.current.scheduleNotification(for: alarmId)
-            AlarmStorage.current.items.find(by: alarmId)?.status = .enabled(notificationReqId)
+            AlarmsStorage.current.items.find(by: alarmId)?.status = .enabled(notificationReqId)
         case false:
             Notifications.current.unscheduleNotification(for: alarmId)
-            AlarmStorage.current.items.find(by: alarmId)?.status = .disabled
+            AlarmsStorage.current.items.find(by: alarmId)?.status = .disabled
         }
         
         // save updated alarms data
-        AlarmStorage.current.saveData()
+        AlarmsStorage.current.saveData()
         
         // update UI: switch appearance
-        if let alarmStatus = AlarmStorage.current.items.find(by: alarmId)?.status {
+        if let alarmStatus = AlarmsStorage.current.items.find(by: alarmId)?.status {
             if sender.onTintColor != alarmStatus.asSwitchColor() {
                 sender.onTintColor = alarmStatus.asSwitchColor()
             }
         }
         // update UI: time label
-        timeLabel.text = AlarmStorage.current.items.find(by: alarmId)?.date?.toString()
+        timeLabel.text = AlarmsStorage.current.items.find(by: alarmId)?.date?.toString()
     }
     
     override func awakeFromNib() {
