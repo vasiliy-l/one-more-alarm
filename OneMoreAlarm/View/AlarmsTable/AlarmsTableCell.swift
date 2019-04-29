@@ -45,6 +45,7 @@ class AlarmsTableCell: UITableViewCell {
                 let updatedAlarmDate = alarmDate.correctTimeToFuture()
                 AlarmStorage.current.items.find(by: alarmId)?.date = updatedAlarmDate
             }
+            
             // register new notification
             let notificationReqId = Notifications.current.scheduleNotification(for: alarmId)
             AlarmStorage.current.items.find(by: alarmId)?.status = .enabled(notificationReqId)
@@ -62,6 +63,8 @@ class AlarmsTableCell: UITableViewCell {
                 sender.onTintColor = alarmStatus.asSwitchColor()
             }
         }
+        // update UI: time label
+        timeLabel.text = AlarmStorage.current.items.find(by: alarmId)?.date?.toString()
     }
     
     override func awakeFromNib() {

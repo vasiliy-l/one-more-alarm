@@ -98,5 +98,17 @@ extension Array where Element:Alarm {
         remove(at: indexPath.row)
     }
     
-    
+    mutating func updateStatusesForCompletedAlarms() {
+        forEach { alarm in
+            switch alarm.status {
+            case .enabled(let notificationReqId) where notificationReqId != nil:
+                if let alarmDate = alarm.date, alarmDate < Date() {
+                    Notifications.current.unscheduleNotification(for: alarm.uuid)
+                    alarm.status = .disabled
+                }
+            default:
+                break;
+            }
+        }
+    }
 }

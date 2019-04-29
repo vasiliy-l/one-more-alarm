@@ -121,7 +121,7 @@ class Notifications: NSObject {
         }
     }
     
-    func updateAlarmStatuses(completion: @escaping () -> Void) {
+    func updateAlarmStatusesForDeliveredNotifications(completion: @escaping () -> Void) {
         notificationCenter.getDeliveredNotifications { notifications in
             // process all delivered notifications
             notifications.forEach { notification in

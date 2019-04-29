@@ -36,7 +36,9 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        Notifications.current.updateAlarmStatuses {
+        Notifications.current.updateAlarmStatusesForDeliveredNotifications {
+            AlarmStorage.current.items.updateStatusesForCompletedAlarms()
+            AlarmStorage.current.saveData()
             NotificationCenter.default.post(name: ViewController.refreshUINotificationName,
                                             object: nil)
         }

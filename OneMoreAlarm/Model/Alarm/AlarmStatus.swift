@@ -32,7 +32,7 @@ extension AlarmStatus: Codable {
         case 0:
             self = .disabled
         case 1:
-            let notificationRequest = try container.decode(UUID.self, forKey: .associatedValue)
+            let notificationRequest = try container.decode(UUID?.self, forKey: .associatedValue)
             self = .enabled(notificationRequest)
         default:
             throw CodingError.unknownValue
