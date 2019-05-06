@@ -26,7 +26,7 @@ class PropertiesTableViewModel {
      Returns amount of existing properties
      */
     var propertiesCount: Int {
-        return AlarmProperty.propertyNames.capacity
+        return AlarmProperty.propertyNames.count
     }
     
     /**
@@ -48,7 +48,16 @@ class PropertiesTableViewModel {
             }
             
             cell.nameLabel.text = property.propertyName()
-             cell.valueLabel.text = AlarmsStorage.current.items.find(by: alarmId)?.name
+            cell.valueLabel.text = AlarmsStorage.current.items.find(by: alarmId)?.name
+            
+            return cell
+        case .Melody:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: TextEditTableCell.identifier, for: indexPath) as? TextEditTableCell else {
+                return UITableViewCell()
+            }
+            
+            cell.nameLabel.text = property.propertyName()
+            cell.valueLabel.text = AlarmsStorage.current.items.find(by: alarmId)?.melody.melodyName()
             
             return cell
         }
@@ -92,15 +101,20 @@ class PropertiesTableViewModel {
             editNameAlert.addAction(applyAction);
             
             currentVC.present(editNameAlert, animated: true, completion: nil)
+        case .Melody:
+            print("TODO")
         }
+        
     }
 }
 
 enum AlarmProperty: Int {
     case Name
+    case Melody
     
     static let propertyNames = [
         Name: "Name",
+        Melody: "Melody",
         ]
     
     func propertyName() -> String {

@@ -33,4 +33,9 @@ class TextEditTableCell: UITableViewCell {
         return String(describing: self)
     }
     
+    override func prepareForReuse() {
+        nameLabel.text = nil
+        valueLabel.text = nil
+    }
+    
 }

@@ -14,11 +14,13 @@ class Alarm: Codable {
     private(set) var alarmId: AlarmID
     var name: String?
     var date: Date?
+    var melody: AlarmMelody
     var status: AlarmStatus
     
     init() {
         alarmId = AlarmID()
         name = "Alarm"
+        melody = .default
         status = .disabled
     }
 }
